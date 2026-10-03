@@ -3,160 +3,334 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>hotwa.sh — seeded red &amp; blue cyber range</title>
-<meta name="description" content="Hotwash builds an individually verified, uncopyable instance of every challenge for every team — and a live attack-and-defend range where red works the kill chain and blue detects and remediates in real time.">
+<title>hotwa.sh — the cyber range that fights back</title>
+<meta name="description" content="A seeded red/blue cyber range. Per-team, uncopyable, self-verifying challenges and a live attack-and-defend arena where red works the kill chain and blue counters in real time — then Hotwash writes the debrief.">
 <link rel="canonical" href="https://hotwa.sh/">
-<meta name="theme-color" content="#0c131b">
-<meta property="og:title" content="hotwa.sh — seeded red & blue cyber range">
-<meta property="og:description" content="Uncopyable flags, self-verifying challenges, and a live attack-and-defend range. Red vs blue, for real.">
+<meta name="theme-color" content="#0a0f16">
+<meta property="og:title" content="hotwa.sh — the cyber range that fights back">
+<meta property="og:description" content="Uncopyable flags, self-verifying challenges, and a live red-vs-blue arena. Then the hotwash.">
 <meta property="og:url" content="https://hotwa.sh/">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
 <style>
+  /* Steel palette (matches the platform) + DEFCON energy: terminal motifs, mono accents, red/blue duality. Dark by design. */
   :root{
-    --bg:#0c131b; --surface:#16212e; --surface-2:#1f2d3d; --line:#30455b; --line-2:#44628a;
-    --ink:#eef4fb; --ink-2:#c7d4e2; --muted:#a2b3c6;
-    --red:#ff6557; --blue:#5b9dff; --ok:#3ac07e;
-    --disp:"Archivo",system-ui,sans-serif; --body:"Inter",system-ui,"Segoe UI",Roboto,sans-serif;
-    --mono:"JetBrains Mono",ui-monospace,monospace;
+    --bg:#0a0f16; --panel:#121a24; --elev:#1b2735; --line:#2a3a4c; --line-2:#3a506a;
+    --ink:#eef4fb; --ink-2:#c7d4e2; --mut:#8ea0b4; --faint:#5a6b7e;
+    --red:#ff6557; --red-dim:#b23a30; --blue:#5b9dff; --blue-dim:#2f5fa6; --ok:#3ae07e; --amber:#f0b429;
+    --disp:"Archivo",system-ui,"Arial Black",sans-serif; --body:"Inter",system-ui,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    color-scheme:dark;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  /* ambient background: grid + red/blue glows */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(900px 420px at 10% -6%,color-mix(in srgb,var(--red) 16%,transparent),transparent 60%),
+      radial-gradient(1000px 460px at 92% -2%,color-mix(in srgb,var(--blue) 18%,transparent),transparent 62%),
+      linear-gradient(transparent 0 97%, color-mix(in srgb,var(--line) 55%,transparent) 100%) 0 0/100% 34px,
+      linear-gradient(90deg, transparent 0 97%, color-mix(in srgb,var(--line) 55%,transparent) 100%) 0 0/34px 100%;
+    opacity:.5}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .mono{font-family:var(--mono)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+  .eyebrow .bk{color:var(--blue)}
+  h1,h2,h3{font-family:var(--disp);letter-spacing:-.025em;text-wrap:balance}
+  .r{color:var(--red)} .b{color:var(--blue)}
   /* header */
-  header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 86%,transparent);
-    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
-  .bar{max-width:1000px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:14px}
-  .wordmark{font-family:var(--disp);font-weight:900;font-size:21px;letter-spacing:-.03em;color:var(--ink);text-decoration:none}
-  .wordmark .dot{color:var(--muted)}
+  header{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);
+    background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px)}
+  .bar{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:14px}
+  .wm{font-family:var(--disp);font-weight:900;font-size:21px;letter-spacing:-.03em}.wm .dot{color:var(--mut)}
+  .badge{font-family:var(--mono);font-size:10px;color:var(--ok);border:1px solid color-mix(in srgb,var(--ok) 40%,transparent);
+    border-radius:999px;padding:2px 8px;background:color-mix(in srgb,var(--ok) 10%,transparent)}
   .spacer{flex:1 1 auto}
-  .ghost{font-size:13px;color:var(--muted);text-decoration:none}
-  .ghost:hover{color:var(--ink)}
+  nav.links{display:flex;gap:18px;font-size:13.5px;color:var(--mut)}
+  nav.links a:hover{color:var(--ink)}
+  @media(max-width:720px){nav.links,.badge{display:none}}
+  .cta{font-family:var(--mono);font-size:12.5px;border:1px solid var(--line-2);border-radius:8px;padding:8px 13px;color:var(--ink);background:var(--elev);transition:.15s}
+  .cta:hover{border-color:var(--red);box-shadow:0 0 0 1px var(--red),0 0 18px -6px var(--red)}
   /* hero */
-  .hero{padding:84px 0 52px;position:relative}
-  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
-    background:radial-gradient(760px 320px at 12% -8%,color-mix(in srgb,var(--red) 16%,transparent),transparent 60%),
-      radial-gradient(820px 340px at 92% -4%,color-mix(in srgb,var(--blue) 18%,transparent),transparent 60%)}
-  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
-  h1{font-family:var(--disp);font-weight:900;font-size:clamp(34px,6.4vw,62px);line-height:1.02;
-    letter-spacing:-.03em;margin:16px 0 0;text-wrap:balance;max-width:15ch}
-  h1 .r{color:var(--red)} h1 .b{color:var(--blue)}
-  .sub{font-size:clamp(16px,2.4vw,20px);color:var(--ink-2);max-width:60ch;margin:20px 0 0}
-  .cmd{display:inline-flex;align-items:center;gap:10px;margin-top:28px;font-family:var(--mono);font-size:14px;
-    background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 15px;color:var(--ink-2)}
-  .cmd .c{color:var(--ok)}
-  /* pillars */
-  section{padding:46px 0;border-top:1px solid var(--line)}
-  .kick{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 20px}
-  .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  @media(max-width:760px){.pillars{grid-template-columns:1fr}}
-  .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
-  .card h3{font-family:var(--disp);font-weight:700;font-size:18px;margin:0 0 8px}
-  .card p{margin:0;color:var(--muted);font-size:14px}
-  .card .ic{width:34px;height:34px;border-radius:9px;background:var(--surface-2);display:grid;place-items:center;margin-bottom:12px}
+  .hero{padding:72px 0 44px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:28px}}
+  h1.big{font-size:clamp(38px,6.6vw,70px);font-weight:900;line-height:.98;margin:16px 0 0}
+  .lede{font-size:clamp(16px,2.3vw,19px);color:var(--ink-2);max-width:54ch;margin:18px 0 0}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .btn{font-family:var(--mono);font-size:14px;border-radius:9px;padding:12px 18px;border:1px solid var(--line-2);
+    background:var(--elev);color:var(--ink);cursor:pointer;transition:.15s;display:inline-flex;gap:8px;align-items:center}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:#06121f;font-weight:600}
+  .btn.primary:hover{box-shadow:0 0 22px -6px var(--blue);transform:translateY(-1px)}
+  .btn.ghost:hover{border-color:var(--ink);transform:translateY(-1px)}
+  .trust{margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .trust b{color:var(--mut);font-weight:500}
+  /* terminal card */
+  .term{background:#0b121b;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 30px 60px -30px #000, inset 0 0 0 1px color-mix(in srgb,var(--blue) 8%,transparent)}
+  .term .tt{display:flex;align-items:center;gap:7px;padding:10px 13px;border-bottom:1px solid var(--line);background:#0e1620}
+  .term .tt i{width:11px;height:11px;border-radius:50%;background:var(--line-2);display:block}
+  .term .tt .t{font-family:var(--mono);font-size:11px;color:var(--faint);margin-left:8px}
+  .term .body{padding:15px;font-family:var(--mono);font-size:13px;min-height:286px}
+  .term .line{color:var(--ink-2);white-space:pre-wrap;word-break:break-word}
+  .term .prompt{color:var(--ok)}
+  .cursor{display:inline-block;width:8px;height:15px;background:var(--ok);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .board{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px;opacity:0;transition:opacity .4s}
+  .board.on{opacity:1}
+  .brow{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .side{font-family:var(--mono);font-size:10px;letter-spacing:.1em}
+  .num{font-family:var(--disp);font-weight:900;font-size:30px;line-height:1}
+  .num.r{color:var(--red)} .num.b{color:var(--blue)}
+  .clock{font-family:var(--mono);font-size:10px;color:var(--mut);text-align:center}
+  .rail{display:flex;gap:4px;margin-top:12px}
+  .rail .st{flex:1;height:7px;border-radius:3px;background:var(--elev);border:1px solid var(--line);transition:.3s}
+  .rail .st.on{background:color-mix(in srgb,var(--red) 55%,var(--elev));border-color:var(--red);box-shadow:0 0 10px -3px var(--red)}
+  .pbp{margin-top:12px;font-family:var(--mono);font-size:11.5px;color:var(--mut);min-height:34px}
+  .pbp .ev{opacity:0;transform:translateY(4px);transition:.3s}
+  .pbp .ev.show{opacity:1;transform:none}
+  .pbp .ev b.r{color:var(--red)} .pbp .ev b.b{color:var(--blue)} .pbp .ev .cut{color:var(--ok)}
+  /* sections */
+  section{padding:58px 0;border-top:1px solid var(--line)}
+  .sec-k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin:0 0 8px}
+  h2.sec{font-size:clamp(26px,4.2vw,40px);font-weight:900;margin:0;max-width:20ch}
+  .sec-lede{color:var(--mut);font-size:15px;max-width:60ch;margin:12px 0 0}
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.cursor{animation:none}}
+  /* guarantees */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media(max-width:760px){.two{grid-template-columns:1fr}}
+  .gcard{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;overflow:hidden;transition:.18s}
+  .gcard:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .gcard .tagn{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:40px;font-weight:700;color:color-mix(in srgb,var(--ink) 7%,transparent)}
+  .gcard h3{font-size:20px;margin:0 0 8px}
+  .gcard p{color:var(--mut);font-size:14px;margin:0}
+  .gcard .cmd{margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--ink-2);background:#0b121b;border:1px solid var(--line);border-radius:8px;padding:9px 11px;overflow-x:auto}
+  .gcard .cmd .mut{color:var(--faint)}
+  .edge-r{box-shadow:inset 3px 0 0 var(--red)} .edge-b{box-shadow:inset 3px 0 0 var(--blue)}
   /* live band */
-  .live{display:grid;grid-template-columns:1.1fr 1fr;gap:26px;align-items:center}
-  @media(max-width:760px){.live{grid-template-columns:1fr}}
-  .live h2{font-family:var(--disp);font-weight:900;font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
-  .live p{color:var(--ink-2);margin:0 0 10px}
-  .chain{display:flex;flex-wrap:wrap;gap:6px}
-  .chain .st{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);
-    border-radius:7px;padding:5px 8px;background:var(--surface)}
-  .chain .st.r{color:var(--ink);border-color:color-mix(in srgb,var(--red) 60%,transparent);
-    background:color-mix(in srgb,var(--red) 16%,var(--surface))}
-  .score{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px}
-  .score .row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .score .n{font-family:var(--disp);font-weight:900;font-size:40px;line-height:1}
-  .score .r .n{color:var(--red)} .score .b .n{color:var(--blue)}
-  .score .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted)}
-  .score .mid{text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted)}
-  .score .cut{margin-top:12px;font-size:12px;color:var(--blue);font-family:var(--mono)}
-  /* chips row */
-  .modes{display:flex;flex-wrap:wrap;gap:10px}
-  .chip{font-family:var(--mono);font-size:12px;color:var(--ink-2);border:1px solid var(--line);
-    border-radius:999px;padding:6px 12px;background:var(--surface)}
+  .live{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;margin-top:26px}
+  @media(max-width:860px){.live{grid-template-columns:1fr}}
+  .live h2{margin-bottom:12px}
+  .live p{color:var(--ink-2);margin:0 0 12px}
+  .kv{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .kv .chip{font-family:var(--mono);font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:7px;padding:5px 9px;background:var(--panel)}
+  .kv .chip.r{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,transparent)}
+  .kv .chip.b{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 40%,transparent)}
+  .socpanel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .socpanel .hd{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--mut);margin-bottom:12px}
+  .alert{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;border-left:3px solid var(--amber);padding:8px 11px;border-radius:7px;background:var(--elev);margin-bottom:8px}
+  .alert.crit{border-left-color:var(--red)}
+  .alert .tk{font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .rem{margin-top:10px;font-family:var(--mono);font-size:12px;color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,transparent);
+    border:1px solid color-mix(in srgb,var(--ok) 30%,transparent);border-radius:8px;padding:9px 11px}
+  /* the loop */
+  .loop{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:28px}
+  @media(max-width:860px){.loop{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:460px){.loop{grid-template-columns:1fr}}
+  .step{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative}
+  .step .n{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em}
+  .step h3{font-size:15px;margin:8px 0 5px}
+  .step p{font-size:12.5px;color:var(--mut);margin:0}
+  /* features */
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  @media(max-width:820px){.feat{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.feat{grid-template-columns:1fr}}
+  .fc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;transition:.16s}
+  .fc:hover{border-color:var(--line-2);background:var(--elev)}
+  .fc .ic{font-family:var(--mono);font-size:11px;color:var(--blue);margin-bottom:8px}
+  .fc h3{font-size:15px;margin:0 0 5px}.fc p{font-size:12.5px;color:var(--mut);margin:0}
+  /* modes */
+  .modes{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .mode{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:9px 13px;background:var(--panel)}
+  .mode .mut{color:var(--faint)}
+  /* cta band */
+  .ctaband{text-align:center;padding:64px 20px}
+  .ctaband h2{font-size:clamp(28px,5vw,46px);font-weight:900;margin:0}
+  .ctaband .run{display:inline-flex;gap:10px;align-items:center;margin-top:22px;font-family:var(--mono);font-size:15px;
+    background:#0b121b;border:1px solid var(--line-2);border-radius:10px;padding:13px 18px;max-width:100%;overflow-x:auto}
+  .ctaband .run .p{color:var(--ok)}
   /* footer */
-  footer{border-top:1px solid var(--line);padding:30px 0 40px;color:var(--muted);font-size:13px}
+  footer{border-top:1px solid var(--line);padding:28px 0 46px;color:var(--mut);font-size:13px}
   footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
-  footer a{color:var(--ink-2);text-decoration:none}
-  footer a:hover{color:var(--ink)}
+  footer a{color:var(--ink-2)} footer a:hover{color:var(--ink)}
 </style>
 </head>
 <body>
 <header><div class="bar">
-  <a class="wordmark" href="/">hotwa<span class="dot">.sh</span></a>
+  <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+  <span class="badge">v0.1 · free core</span>
   <span class="spacer"></span>
-  <a class="ghost" href="#how">How it works</a>
-  <a class="ghost" href="#live">Live range</a>
+  <nav class="links"><a href="#guarantees">Guarantees</a><a href="#live">Live range</a><a href="#loop">How it works</a><a href="#features">Features</a></nav>
+  <a class="cta" href="#live">Watch a match</a>
 </div></header>
 
 <main>
-  <div class="wrap hero">
-    <div class="eyebrow">Seeded red &amp; blue cyber range</div>
-    <h1>Every team gets a <span class="r">different</span>, <span class="b">unbreakable</span> instance.</h1>
-    <p class="sub">Hotwash turns one authored challenge into a per-team seeded variant, then re-solves it
-      automatically before release. A leaked flag is worthless to everyone else — and traceable to whoever
-      leaked it. Nothing ships broken, because an independent solver has already proven it.</p>
-    <div class="cmd"><span class="c">❯</span> hotwash engage serve&nbsp;<span style="color:var(--muted)">--scenario ransomware</span></div>
-  </div>
-
-  <section id="how"><div class="wrap">
-    <p class="kick">Two guarantees, everything else serves them</p>
-    <div class="pillars">
-      <div class="card"><div class="ic">🎯</div><h3>Uncopyable flags</h3>
-        <p>Each team's flag derives from its seed. Share it and it's simply wrong for the next team — and the
-          submission log points back to the owner.</p></div>
-      <div class="card"><div class="ic">✓</div><h3>Never-broken challenges</h3>
-        <p>Before any instance is served, an independent solver recovers every flag from the generated
-          artifacts or live target. An instance that can't be solved is never handed out.</p></div>
-      <div class="card"><div class="ic">⚔</div><h3>Red <span style="color:var(--muted)">&amp;</span> blue, first-class</h3>
-        <p>Offensive and defensive challenges share one model, one scoreboard, one report — including
-          detection-engineering challenges graded on rules you write.</p></div>
-    </div>
-  </div></section>
-
-  <section id="live"><div class="wrap live">
+  <!-- HERO -->
+  <section class="hero" style="border-top:0"><div class="wrap hero-grid">
     <div>
-      <h2>Live attack <span style="color:var(--muted)">&amp;</span> defend</h2>
-      <p>Red works a real kill chain against a seeded network. Every move emits telemetry; a behaviour-analytics
-        layer raises alerts to blue, who remediates in real time.</p>
-      <p>Cut the attacker's active path — isolate a host, disable an account, patch a service — and that's a
-        point for defense. Red has to find another way, or get contained before the clock runs out.</p>
-      <div class="chain" aria-label="kill chain">
-        <span class="st r">recon</span><span class="st r">enumerate</span><span class="st r">initial access</span>
-        <span class="st r">cred access</span><span class="st">lateral</span><span class="st">privesc</span><span class="st">objective</span>
+      <div class="eyebrow"><span class="bk">[</span> seeded red <span class="r">//</span> blue cyber range <span class="bk">]</span></div>
+      <h1 class="big">The range that <span class="r">fights</span> <span class="b">back</span>.</h1>
+      <p class="lede">Every team gets a different, uncopyable, self-verified instance of every challenge. Then they go to war &mdash; <strong>live</strong> &mdash; red working the kill chain while blue detects and counters in real time. When the dust settles, Hotwash writes the debrief.</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#loop">Start a range</a>
+        <a class="btn ghost" href="#live">See a live match</a>
+      </div>
+      <div class="trust">
+        <span><b>Uncopyable</b> per-team flags</span><span><b>Self-verifying</b> challenges</span><span><b>Offline</b> &amp; air-gapped</span>
       </div>
     </div>
-    <div class="score" aria-hidden="true">
-      <div class="row">
-        <div class="r"><div class="lbl" style="color:var(--red)">RED · ATTACKER</div><div class="n">220</div></div>
-        <div class="mid">t12 / 40<br>● LIVE</div>
-        <div class="b" style="text-align:right"><div class="lbl" style="color:var(--blue)">BLUE · DEFENDER</div><div class="n">135</div></div>
+    <div class="term reveal" id="term">
+      <div class="tt"><i></i><i></i><i></i><span class="t">hotwa.sh &mdash; engagement</span></div>
+      <div class="body">
+        <div class="line"><span class="prompt">&#10095;</span> <span id="typed"></span><span class="cursor" id="cur"></span></div>
+        <div class="board" id="board">
+          <div class="brow">
+            <div><div class="side r">&#9678; RED &middot; ATTACK</div><div class="num r" id="rs">0</div></div>
+            <div class="clock">MATCH CLOCK<br><span id="clk">t00</span> / 40<br>&#9679; LIVE</div>
+            <div style="text-align:right"><div class="side b">DEFEND &middot; BLUE &#9678;</div><div class="num b" id="bs">0</div></div>
+          </div>
+          <div class="rail" id="rail"><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span><span class="st"></span></div>
+          <div class="pbp" id="pbp"></div>
+        </div>
       </div>
-      <div class="cut">🛡 BLUE isolates WEB01 — attacker cut off! +defense</div>
     </div>
   </div></section>
 
-  <section><div class="wrap">
-    <p class="kick">One binary, three modes</p>
-    <div class="modes">
-      <span class="chip">Training — offline, single player</span>
-      <span class="chip">Events — teams, scoreboard, live targets</span>
-      <span class="chip">Classroom — LTI 1.3, graded</span>
-      <span class="chip">Air-gapped ready</span>
-      <span class="chip">After-action reports</span>
+  <!-- GUARANTEES -->
+  <section id="guarantees"><div class="wrap">
+    <p class="sec-k reveal">// two guarantees</p>
+    <h2 class="sec reveal">Leaked flags are worthless. Broken challenges don't ship.</h2>
+    <div class="two">
+      <div class="gcard edge-r reveal"><span class="tagn">01</span>
+        <h3>Uncopyable flags</h3>
+        <p>Every flag is derived from the team's seed. Paste it into another team's box and it's just wrong &mdash; and the submission log points straight back to whoever leaked it.</p>
+        <div class="cmd">flag = HMAC(seed, challenge) <span class="mut"># different for every team</span></div>
+      </div>
+      <div class="gcard edge-b reveal"><span class="tagn">02</span>
+        <h3>Never-broken challenges</h3>
+        <p>Before any instance is served, an independent solver re-solves it headlessly. If it can't recover the flag, the instance is regenerated or pulled. Nothing reaches a player unverified.</p>
+        <div class="cmd"><span class="mut">[verify]</span> fresh-catch: solver recovered primary &#10003;</div>
+      </div>
     </div>
+  </div></section>
+
+  <!-- LIVE -->
+  <section id="live"><div class="wrap">
+    <p class="sec-k reveal">// the main event</p>
+    <div class="live">
+      <div class="reveal">
+        <h2 class="sec">Live attack <span class="b">&amp;</span> defend</h2>
+        <p>Red recons, exploits, harvests credentials, pivots, escalates and goes for the objective on a seeded network. Every move throws off telemetry.</p>
+        <p>A behaviour-analytics layer turns that telemetry into alerts. Blue works the queue and hits back &mdash; isolate a host, kill a session, disable an account, patch a service. Cut red's active path and that's a point for defense. Red adapts, or gets contained before the clock runs out.</p>
+        <div class="kv">
+          <span class="chip r">recon</span><span class="chip r">exploit</span><span class="chip r">cred access</span>
+          <span class="chip b">detect</span><span class="chip b">isolate</span><span class="chip b">contain</span>
+        </div>
+      </div>
+      <div class="socpanel reveal">
+        <div class="hd"><span>BLUE SOC &middot; alert queue</span><span>&#9679; live</span></div>
+        <div class="alert crit"><span class="tk">t11</span><div><strong>Credential dumping</strong> &mdash; T1003 on WEB01<br><span style="color:var(--faint)">from 203.0.113.66</span></div></div>
+        <div class="alert"><span class="tk">t13</span><div><strong>Suspicious auth / lateral</strong> &mdash; T1021 &middot; APP01 as svc_app</div></div>
+        <div class="rem">&#128737; isolate WEB01 &mdash; attacker cut off! +defense</div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- LOOP -->
+  <section id="loop"><div class="wrap">
+    <p class="sec-k reveal">// the loop</p>
+    <h2 class="sec reveal">Author once. Everyone fights a different fight.</h2>
+    <div class="loop">
+      <div class="step reveal"><div class="n">01 &middot; AUTHOR</div><h3>Write it once</h3><p>One challenge template in YAML &mdash; artifacts, flags, a solver, a live target.</p></div>
+      <div class="step reveal"><div class="n">02 &middot; SEED</div><h3>Per-team variant</h3><p>Each team's seed produces its own hosts, creds and flags.</p></div>
+      <div class="step reveal"><div class="n">03 &middot; VERIFY</div><h3>Fresh catch</h3><p>An independent solver proves every instance before release.</p></div>
+      <div class="step reveal"><div class="n">04 &middot; PLAY</div><h3>Attack &amp; defend</h3><p>Jeopardy, detection rules, or a live red/blue engagement.</p></div>
+      <div class="step reveal"><div class="n">05 &middot; HOTWASH</div><h3>Debrief</h3><p>An automatic after-action report with a prioritized fix plan.</p></div>
+    </div>
+  </div></section>
+
+  <!-- FEATURES -->
+  <section id="features"><div class="wrap">
+    <p class="sec-k reveal">// arsenal</p>
+    <h2 class="sec reveal">Built for the whole fight.</h2>
+    <div class="feat">
+      <div class="fc reveal"><div class="ic">[ red ]</div><h3>Live targets</h3><p>Seeded, sandboxed, loopback-only vulnerable apps. Real exploitation, isolated per team.</p></div>
+      <div class="fc reveal"><div class="ic">[ blue ]</div><h3>Detection engineering</h3><p>Write a Sigma or YARA rule; it's graded on planted malicious + benign data. Pass with no false positives.</p></div>
+      <div class="fc reveal"><div class="ic">[ purple ]</div><h3>Dual-face incidents</h3><p>One incident, two sides &mdash; red exploits it, blue detects it from the telemetry the exploit produced.</p></div>
+      <div class="fc reveal"><div class="ic">[ sys ]</div><h3>Offline &amp; air-gapped</h3><p>Runs with the cable unplugged. Signed offline content bundles, no pulls at play time.</p></div>
+      <div class="fc reveal"><div class="ic">[ edu ]</div><h3>Classroom / LTI 1.3</h3><p>Rostered teams, graded challenges, scores posted back to the gradebook.</p></div>
+      <div class="fc reveal"><div class="ic">[ aar ]</div><h3>After-action reports</h3><p>NCL-style scouting reports and a facilitated hotwash with an owned, prioritized remediation plan.</p></div>
+    </div>
+    <div class="modes">
+      <span class="mode">Training <span class="mut">&mdash; offline, solo</span></span>
+      <span class="mode">Events <span class="mut">&mdash; teams, scoreboard, live targets</span></span>
+      <span class="mode">Classroom <span class="mut">&mdash; LTI, graded</span></span>
+    </div>
+  </div></section>
+
+  <!-- CTA -->
+  <section><div class="ctaband reveal">
+    <p class="sec-k" style="color:var(--mut)">// spin one up</p>
+    <h2>Pick a side.</h2>
+    <div class="run"><span class="p">&#10095;</span> ./hotwash engage serve <span style="color:var(--mut)">--scenario zero-hour</span><span class="cursor"></span></div>
   </div></section>
 </main>
 
 <footer><div class="wrap">
   <span>&copy; 2026 Hotwash. Part of <a href="https://competencecollective.org">The Competence Collective</a>.</span>
-  <span class="wordmark" style="font-size:16px">hotwa<span class="dot">.sh</span></span>
+  <span class="wm" style="font-size:16px">hotwa<span class="dot">.sh</span></span>
 </div></footer>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var io = new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  var cmd = './hotwash engage serve --scenario zero-hour';
+  var typed = document.getElementById('typed'), board = document.getElementById('board'), cur = document.getElementById('cur');
+  var evs = [
+    ['t03', '<b class="r">RED</b> exploits WEB01 — initial access'],
+    ['t06', '<b class="r">RED</b> dumps credentials on WEB01'],
+    ['t08', '<b class="b">BLUE</b> isolates WEB01 — <span class="cut">attacker cut off! +def</span>'],
+    ['t11', '<b class="r">RED</b> pivots to APP01 — lateral movement'],
+    ['t15', '<b class="r">RED</b> escalates to admin on APP01'],
+    ['t21', '<b class="b">BLUE</b> disables svc_app — <span class="cut">cut off! +def</span>']
+  ];
+  function boot(){
+    board.classList.add('on'); if(cur) cur.style.display='none';
+    var rs=document.getElementById('rs'), bs=document.getElementById('bs'), clk=document.getElementById('clk');
+    var rail=document.getElementById('rail').children, pbp=document.getElementById('pbp');
+    var rT=220,bT=135, i=0, ev=0;
+    var tick=setInterval(function(){
+      i++; if(i<=40) clk.textContent='t'+String(i).padStart(2,'0');
+      rs.textContent=Math.min(rT,Math.round(rT*i/26));
+      bs.textContent=Math.min(bT,Math.round(bT*i/30));
+      if(i%4===0 && ev<rail.length) rail[ev++].classList.add('on');
+      if(i>=40){clearInterval(tick); rs.textContent=rT; bs.textContent=bT;}
+    }, reduce?1:70);
+    evs.forEach(function(e,ix){
+      setTimeout(function(){
+        var d=document.createElement('div'); d.className='ev'; d.innerHTML='<span style="color:var(--faint)">'+e[0]+' </span>'+e[1];
+        pbp.appendChild(d); requestAnimationFrame(function(){d.classList.add('show');});
+        while(pbp.children.length>3) pbp.removeChild(pbp.firstChild);
+      }, reduce?0:(500+ix*700));
+    });
+  }
+  if(reduce){ typed.textContent=cmd; boot(); return; }
+  var k=0;
+  (function type(){
+    if(k<=cmd.length){ typed.textContent=cmd.slice(0,k++); setTimeout(type, 42); }
+    else { setTimeout(boot, 380); }
+  })();
+})();
+</script>
 </body>
 </html>
