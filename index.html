@@ -125,8 +125,12 @@
   /* sections */
   section{padding:58px 0;border-top:1px solid var(--line)}
   .sec-k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin:0 0 8px}
-  h2.sec{font-size:clamp(26px,4.2vw,40px);font-weight:900;margin:0;max-width:20ch}
+  h2.sec{font-size:clamp(26px,4.2vw,40px);font-weight:900;margin:0;max-width:26ch;text-wrap:balance}
   .sec-lede{color:var(--ink-2);font-size:15px;max-width:62ch;margin:12px 0 0}
+  /* two-column section header: heading left, lede right, so the row fills the width */
+  .sechead{display:grid;grid-template-columns:1.1fr .9fr;gap:16px 46px;align-items:end}
+  .sechead h2.sec{max-width:none} .sechead .sh-l{min-width:0} .sechead .sec-lede{max-width:none;margin:0}
+  @media(max-width:860px){.sechead{grid-template-columns:1fr;gap:10px;align-items:start}.sechead .sec-lede{max-width:62ch}}
   /* reveal on scroll */
   .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
   .reveal.in{opacity:1;transform:none}
@@ -586,9 +590,11 @@
 
   <!-- LIVE ARENA -->
   <section id="arena" aria-labelledby="arena-h"><div class="wrap">
-    <p class="sec-k reveal">// the headline differentiator</p>
-    <h2 class="sec reveal" id="arena-h">The live arena, on the projector.</h2>
-    <p class="sec-lede reveal">Players use real tools on real infrastructure. Hotwash doesn&rsquo;t score the commands they type &mdash; it scores what they actually achieve, checked server-side. Observers watch it unfold.</p>
+    <div class="sechead">
+      <div class="sh-l"><p class="sec-k reveal">// the headline differentiator</p>
+      <h2 class="sec reveal" id="arena-h">The live arena, on the projector.</h2></div>
+      <p class="sec-lede reveal">Players use real tools on real infrastructure. Hotwash doesn&rsquo;t score the commands they type &mdash; it scores what they actually achieve, checked server-side. Observers watch it unfold.</p>
+    </div>
 
     <!-- live attack map for observers -->
     <div class="amapwrap reveal" id="amapwrap">
@@ -653,8 +659,10 @@
     </div>
 
     <!-- gate outcomes, not keystrokes -->
-    <h2 class="sec reveal" style="margin-top:46px">Gate outcomes, not keystrokes.</h2>
-    <p class="sec-lede reveal">No points for an exploit that merely fires. Red scores only by recovering the seeded proof from the box it was planted on &mdash; and holding it. Blue scores by detecting, containing and keeping services answering.</p>
+    <div class="sechead" style="margin-top:46px">
+      <h2 class="sec reveal">Gate outcomes, not keystrokes.</h2>
+      <p class="sec-lede reveal">No points for an exploit that merely fires. Red scores only by recovering the seeded proof from the box it was planted on &mdash; and holding it. Blue scores by detecting, containing and keeping services answering.</p>
+    </div>
     <div class="gate">
       <div class="gcol r reveal">
         <h3><span class="r">Red</span> scores on real compromise</h3>
@@ -676,8 +684,10 @@
     <p class="mediation reveal"><b>The mediation plane.</b> Both cells act on one seeded network through a mediation layer. A <b>data plane</b> &mdash; a segmentation gateway every flow crosses, plus host sensors reading ground truth &mdash; feeds one correlated stream to both sides at once. A <b>control-plane referee</b> holds the prerequisite graph, dwell timers, proof grading and the uptime/disruption ledger over an immutable journal. The score is ground truth, not either side&rsquo;s claim.</p>
 
     <!-- loadout draft -->
-    <h2 class="sec reveal" style="margin-top:46px">Draft your loadout. Spend the prep window.</h2>
-    <p class="sec-lede reveal">A match runs <strong>draft &rarr; prep &rarr; live &rarr; hotwash</strong>. Each cell spends a symmetric budget on real capabilities, then gets a timed prep window to deploy them &mdash; with the availability checker already running, so you can&rsquo;t just turn everything off.</p>
+    <div class="sechead" style="margin-top:46px">
+      <h2 class="sec reveal">Draft your loadout. Spend the prep window.</h2>
+      <p class="sec-lede reveal">A match runs <strong>draft &rarr; prep &rarr; live &rarr; hotwash</strong>. Each cell spends a symmetric budget on real capabilities, then gets a timed prep window to deploy them &mdash; with the availability checker already running, so you can&rsquo;t just turn everything off.</p>
+    </div>
     <div class="draftbox reveal">
       <div class="dh"><span>PRE-GAME LOADOUT &middot; draft + prep</span><span class="budget">budget 100 pts &middot; 4 picks</span></div>
       <div class="picks">
@@ -690,8 +700,10 @@
     </div>
 
     <!-- ends in a hotwash -->
-    <h2 class="sec reveal" style="margin-top:46px">Every arena ends in a facilitated hotwash.</h2>
-    <p class="sec-lede reveal">The moment the clock stops, the engagement journal becomes an after-action report &mdash; a three-axis scorecard per side, a per-operator breakdown, and an owned, prioritized improvement plan.</p>
+    <div class="sechead" style="margin-top:46px">
+      <h2 class="sec reveal">Every arena ends in a facilitated hotwash.</h2>
+      <p class="sec-lede reveal">The moment the clock stops, the engagement journal becomes an after-action report &mdash; a three-axis scorecard per side, a per-operator breakdown, and an owned, prioritized improvement plan.</p>
+    </div>
     <div class="hw-teaser">
       <div class="reveal">
         <div class="axes" aria-hidden="true">
@@ -715,9 +727,11 @@
 
   <!-- SCENARIOS -->
   <section id="scenarios" aria-labelledby="scn-h"><div class="wrap">
-    <p class="sec-k reveal">// the slate</p>
-    <h2 class="sec reveal" id="scn-h">Thirteen-plus engagements. Every sector.</h2>
-    <p class="sec-lede reveal">Industry-accurate attack paths &mdash; correct components, ports and kill-chain ordering, all fictional by construction. Each is a seeded network with multiple crown jewels, multiple paths, decoys and real detection gaps. Red picks which prize to chase; blue works a limited budget and can&rsquo;t lock the whole network down at once.</p>
+    <div class="sechead">
+      <div class="sh-l"><p class="sec-k reveal">// the slate</p>
+      <h2 class="sec reveal" id="scn-h">Thirteen-plus engagements. Every sector.</h2></div>
+      <p class="sec-lede reveal">Industry-accurate attack paths &mdash; correct components, ports and kill-chain ordering, all fictional by construction. Each is a seeded network with multiple crown jewels, multiple paths, decoys and real detection gaps. Red picks which prize to chase; blue works a limited budget and can&rsquo;t lock the whole network down at once.</p>
+    </div>
     <div class="scn">
       <div class="scard reveal"><p class="op">OPERATION IRONROOT</p><h3>Active Directory</h3><div class="row"><span class="t sec">on-prem AD</span><span class="t">Kerberoast &rarr; DCSync</span></div></div>
       <div class="scard reveal"><p class="op">OPERATION HELMSMAN</p><h3>Kubernetes escape</h3><div class="row"><span class="t sec">cloud-native</span><span class="t">ingress &rarr; kubelet &rarr; etcd</span></div></div>
@@ -737,9 +751,11 @@
 
   <!-- SCALE / COHORTS -->
   <section id="scale" aria-labelledby="scale-h"><div class="wrap">
-    <p class="sec-k reveal">// run the room</p>
-    <h2 class="sec reveal" id="scale-h">One analyst, or a ranked cohort.</h2>
-    <p class="sec-lede reveal">Spin up a single seat or a whole competition. Every team gets its own seeded, uncopyable variant of the same scenario, ranked live, and advanced prep&rarr;live in a single organizer action.</p>
+    <div class="sechead">
+      <div class="sh-l"><p class="sec-k reveal">// run the room</p>
+      <h2 class="sec reveal" id="scale-h">One analyst, or a ranked cohort.</h2></div>
+      <p class="sec-lede reveal">Spin up a single seat or a whole competition. Every team gets its own seeded, uncopyable variant of the same scenario, ranked live, and advanced prep&rarr;live in a single organizer action.</p>
+    </div>
     <div class="two">
       <div class="gcard edge-b reveal">
         <h3>Live leaderboard</h3>
