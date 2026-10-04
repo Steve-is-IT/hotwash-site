@@ -177,6 +177,80 @@
   .frontmap .node.hot circle{stroke:var(--red);fill:#241216}
   .frontmap .node.hot text{fill:var(--red)}
   @media(prefers-reduced-motion:reduce){.frontmap .arc{opacity:1;stroke-dashoffset:0;animation:none}}
+  /* ===== LIVE ARENA ===== */
+  .arena-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+  .arena-tag{font-family:var(--mono);font-size:11px;color:var(--mut);border:1px solid var(--line);border-radius:999px;padding:5px 12px;background:var(--panel)}
+  .arena-tag b.r{color:var(--red);font-weight:600} .arena-tag b.b{color:var(--blue);font-weight:600}
+  /* three products */
+  .prods{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  @media(max-width:820px){.prods{grid-template-columns:1fr}}
+  .prod{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;overflow:hidden;transition:.18s}
+  .prod:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .prod .pk{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+  .prod.r .pk{color:var(--red)} .prod.b .pk{color:var(--blue)} .prod.p .pk{color:var(--ink)}
+  .prod.r{box-shadow:inset 3px 0 0 var(--red)} .prod.b{box-shadow:inset 3px 0 0 var(--blue)}
+  .prod.p{box-shadow:inset 3px 0 0 var(--red),inset -3px 0 0 var(--blue)}
+  .prod h3{font-size:17px;margin:0 0 7px}
+  .prod p{color:var(--mut);font-size:13px;margin:0}
+  .prod .eng{margin-top:13px;font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+  /* arena attack map */
+  .amapwrap{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 16px 12px}
+  .amaptop{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--mut);margin-bottom:6px}
+  .amaptop .roomtip{color:var(--faint)}
+  .amap{width:100%;display:block;color:var(--mut)}
+  .amap .lane{fill:#0e1620;stroke:var(--line)}
+  .amap .lane.jewel{stroke:#caa23a}
+  .amap .zlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;fill:var(--faint)}
+  .amap .cell{font-family:var(--disp);font-weight:900;font-size:12px}
+  .amap .host{font-family:var(--mono);font-size:10px;fill:var(--mut)}
+  .amap .sub{font-family:var(--mono);font-size:8.5px;fill:var(--faint)}
+  .amap .ring{fill:#0e1620}
+  .amap .ring.red{stroke:var(--red-dim)} .amap .ring.blue{stroke:var(--blue-dim)} .amap .ring.host{stroke:var(--line-2)} .amap .ring.decoy{stroke:#caa23a;stroke-dasharray:3 3}
+  .amap .flow{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:0;stroke-dasharray:7 6;stroke-dashoffset:300}
+  .amap .flow.atk{stroke:var(--red)} .amap .flow.def{stroke:var(--blue)}
+  .amap .flow.on{opacity:.95;animation:aflow 1.2s linear forwards}
+  @keyframes aflow{to{stroke-dashoffset:0}}
+  .amap .node{transition:.35s}
+  .amap .node.hot .ring{stroke:var(--red);fill:#241216} .amap .node.hot .host{fill:var(--red)}
+  .amap .node.fell .ring{stroke:var(--red);fill:#2a0f12;stroke-width:2.5} .amap .node.fell .host{fill:var(--red)}
+  .amap .pulse{fill:var(--red);opacity:0}
+  .amap .pulse.on{animation:apulse 1.3s ease-out infinite}
+  @keyframes apulse{0%{opacity:.5;r:20}100%{opacity:0;r:34}}
+  @media(prefers-reduced-motion:reduce){.amap .flow{opacity:.9;stroke-dashoffset:0;animation:none}.amap .pulse.on{animation:none;opacity:0}}
+  .amaplegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .amaplegend i{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:0;margin-right:5px}
+  .amaplegend i.r{background:var(--red)} .amaplegend i.b{background:var(--blue)} .amaplegend i.j{background:#caa23a} .amaplegend i.d{background:transparent;border:1px dashed #caa23a}
+  /* streaming timeline */
+  .stream{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font-family:var(--mono);font-size:11.5px;display:grid;gap:5px}
+  .stream .row{display:flex;gap:9px;align-items:baseline}
+  .stream .row .tk{color:var(--faint);min-width:30px}
+  .stream .row .r{color:var(--red)} .stream .row .b{color:var(--blue)} .stream .row .cut{color:var(--ok)} .stream .row .j{color:#e8c76a}
+  /* gate outcomes split */
+  .gate{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:26px}
+  @media(max-width:760px){.gate{grid-template-columns:1fr}}
+  .gcol{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .gcol.r{box-shadow:inset 3px 0 0 var(--red)} .gcol.b{box-shadow:inset 3px 0 0 var(--blue)}
+  .gcol h3{font-size:16px;margin:0 0 6px}
+  .gcol h3 .r{color:var(--red)} .gcol h3 .b{color:var(--blue)}
+  .gcol p{color:var(--mut);font-size:13px;margin:0 0 10px}
+  .gcol .gated{font-family:var(--mono);font-size:11.5px;color:var(--ink-2);background:#0b121b;border:1px solid var(--line);border-radius:8px;padding:9px 11px}
+  .gcol .gated .ok{color:var(--ok)}
+  .mediation{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--mut);background:var(--elev);border:1px solid var(--line);border-left:3px solid var(--blue);border-radius:8px;padding:11px 13px}
+  .mediation b{color:var(--ink-2);font-weight:600}
+  /* loadout draft */
+  .draftbox{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .draftbox .dh{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--mut);margin-bottom:14px}
+  .draftbox .budget{color:var(--ok)}
+  .picks{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:820px){.picks{grid-template-columns:1fr 1fr}}
+  @media(max-width:460px){.picks{grid-template-columns:1fr}}
+  .pick{background:var(--elev);border:1px solid var(--line);border-radius:10px;padding:12px}
+  .pick .pt{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+  .pick .nm{font-family:var(--disp);font-weight:700;font-size:13.5px}
+  .pick .cost{font-family:var(--mono);font-size:11px;color:var(--amber)}
+  .pick .tr{font-size:11.5px;color:var(--mut);margin-top:6px;line-height:1.5}
+  .pick .tr .minus{color:var(--red)}
+  .pick.r{border-top:2px solid var(--red-dim)} .pick.b{border-top:2px solid var(--blue-dim)}
   /* scenarios */
   .scn{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:26px}
   @media(max-width:820px){.scn{grid-template-columns:1fr 1fr}}
@@ -222,7 +296,7 @@
   <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
   <span class="badge">v0.1 · free core</span>
   <span class="spacer"></span>
-  <nav class="links"><a href="#live">Live range</a><a href="#scenarios">Scenarios</a><a href="#loop">How it works</a><a href="#features">Features</a><a href="#faq">FAQ</a></nav>
+  <nav class="links"><a href="#live">Live range</a><a href="#arena">Live Arena</a><a href="#scenarios">Scenarios</a><a href="#loop">How it works</a><a href="#features">Features</a><a href="#faq">FAQ</a></nav>
   <a class="cta" href="#live">Watch a match</a>
 </div></header>
 
@@ -325,6 +399,136 @@
         <div class="alert crit"><span class="tk">t11</span><div><strong>Credential dumping</strong> &mdash; T1003 on WEB01<br><span style="color:var(--faint)">from 203.0.113.66</span></div></div>
         <div class="alert"><span class="tk">t13</span><div><strong>Suspicious auth / lateral</strong> &mdash; T1021 &middot; APP01 as svc_app</div></div>
         <div class="rem">&#128737; isolate WEB01 &mdash; attacker cut off! +defense</div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- LIVE ARENA -->
+  <section id="arena"><div class="wrap">
+    <div class="arena-head">
+      <div>
+        <p class="sec-k reveal">// the headline differentiator</p>
+        <h2 class="sec reveal">One engine. <span class="r">Red</span>, <span class="b">blue</span>, and live <span class="r">red</span>-vs-<span class="b">blue</span>.</h2>
+      </div>
+      <span class="arena-tag reveal">server-graded &middot; offline-first &middot; <b class="r">attack</b> &amp; <b class="b">defend</b></span>
+    </div>
+    <p class="sec-lede reveal">Most ranges do one. Hotwash runs seeded red-team CTF, blue-team detection CTF, and a <strong>live red-vs-blue arena</strong> on the same seeded core &mdash; same artifacts, same flags, same grader. Pick the fight; the engine doesn't change.</p>
+
+    <!-- three products -->
+    <div class="prods">
+      <div class="prod r reveal"><div class="pk">[ red CTF ]</div>
+        <h3>Seeded red-team</h3>
+        <p>Per-team, uncopyable Jeopardy against sandboxed live targets. Recon to objective, no two boxes alike.</p>
+        <div class="eng">engine: seed &rarr; artifacts &rarr; HMAC flags</div>
+      </div>
+      <div class="prod b reveal"><div class="pk">[ blue CTF ]</div>
+        <h3>Blue-team detection</h3>
+        <p>Write a Sigma or YARA rule; it's graded server-side on planted malicious + benign data. Catch the plant, no false positives.</p>
+        <div class="eng">engine: same seed &rarr; telemetry corpus</div>
+      </div>
+      <div class="prod p reveal"><div class="pk">[ live red // blue ]</div>
+        <h3>Live arena</h3>
+        <p>Both cells on one board at once &mdash; red works the kill chain while blue detects, contains and keeps services up. The clock decides it.</p>
+        <div class="eng">engine: same seed &rarr; shared live network</div>
+      </div>
+    </div>
+
+    <!-- live attack map for observers -->
+    <div class="amapwrap reveal" id="amapwrap">
+      <div class="amaptop"><span>LIVE ARENA &middot; observer board</span><span class="roomtip">&#9679; built for the room &middot; project it</span></div>
+      <svg class="amap" viewBox="0 0 900 250" role="img" aria-label="Live arena observer map: the RED cell on the left attacks your DMZ, internal and admin zones toward the crown jewels; the BLUE cell on the right detects and contains.">
+        <!-- zone labels -->
+        <text class="zlbl" x="300" y="22" text-anchor="middle">DMZ</text>
+        <text class="zlbl" x="470" y="22" text-anchor="middle">INTERNAL</text>
+        <text class="zlbl" x="660" y="22" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
+        <!-- lanes -->
+        <rect class="lane" x="240" y="34" width="120" height="176" rx="10"/>
+        <rect class="lane" x="410" y="34" width="120" height="176" rx="10"/>
+        <rect class="lane jewel" x="600" y="34" width="120" height="176" rx="10"/>
+        <!-- static trust edges -->
+        <line class="edge" style="stroke:var(--line)" x1="300" y1="92" x2="470" y2="92"/>
+        <line class="edge" style="stroke:var(--line)" x1="470" y1="92" x2="660" y2="92"/>
+        <line class="edge" style="stroke:var(--line)" x1="470" y1="92" x2="470" y2="162"/>
+        <!-- attack flows (red, left to right) -->
+        <path class="flow atk" id="af1" d="M92 122 C 160 122 190 92 296 92"/>
+        <path class="flow atk" id="af2" d="M300 92 H 466"/>
+        <path class="flow atk" id="af3" d="M470 92 H 656"/>
+        <!-- decoy lure (red into honeypot, then dead-ends) -->
+        <path class="flow atk" id="af4" d="M300 92 C 360 92 400 162 466 162"/>
+        <!-- defense flows (blue, right to left) -->
+        <path class="flow def" id="df1" d="M808 150 C 720 150 560 150 474 96"/>
+        <path class="flow def" id="df2" d="M808 150 C 700 150 420 150 304 96"/>
+        <!-- RED cell -->
+        <g class="node"><circle class="ring red" cx="70" cy="122" r="26"/><text class="cell" x="70" y="118" text-anchor="middle" fill="var(--red)">RED</text><text class="sub" x="70" y="132" text-anchor="middle">CELL</text></g>
+        <!-- infra nodes -->
+        <g class="node" id="an1"><circle class="pulse" cx="300" cy="92" r="20"/><circle class="ring host" cx="300" cy="92" r="20"/><text class="host" x="300" y="95" text-anchor="middle">web01</text></g>
+        <g class="node" id="an2"><circle class="pulse" cx="470" cy="92" r="20"/><circle class="ring host" cx="470" cy="92" r="20"/><text class="host" x="470" y="95" text-anchor="middle">app01</text></g>
+        <g class="node" id="an3"><circle class="pulse" cx="660" cy="92" r="22"/><circle class="ring host" cx="660" cy="92" r="22"/><text class="host" x="660" y="88" text-anchor="middle" fill="#e8c76a">dc01</text><text class="sub" x="660" y="100" text-anchor="middle" fill="#caa23a">jewel</text></g>
+        <!-- decoy / honeypot -->
+        <g class="node"><circle class="ring decoy" cx="470" cy="162" r="18"/><text class="host" x="470" y="165" text-anchor="middle" fill="#caa23a">hp01</text><text class="sub" x="470" y="192" text-anchor="middle">decoy</text></g>
+        <!-- BLUE cell -->
+        <g class="node"><circle class="ring blue" cx="830" cy="150" r="26"/><text class="cell" x="830" y="146" text-anchor="middle" fill="var(--blue)">BLUE</text><text class="sub" x="830" y="160" text-anchor="middle">CELL</text></g>
+      </svg>
+      <div class="amaplegend">
+        <span><i class="r"></i>red action</span>
+        <span><i class="b"></i>blue action</span>
+        <span><i class="j"></i>crown jewel</span>
+        <span><i class="d"></i>decoy / honeypot</span>
+      </div>
+      <div class="stream" id="astream" aria-hidden="true"></div>
+    </div>
+
+    <!-- gate outcomes, not keystrokes -->
+    <h2 class="sec reveal" style="margin-top:46px">Gate outcomes, not keystrokes.</h2>
+    <p class="sec-lede reveal">Players use real tools on real infrastructure. We don't score the commands they type &mdash; we score what they actually achieve, checked server-side.</p>
+    <div class="gate">
+      <div class="gcol r reveal">
+        <h3><span class="r">Red</span> scores on real compromise</h3>
+        <p>No points for an exploit that fires &mdash; only for recovering the seeded proof from the target it was planted on.</p>
+        <div class="gated"><span class="ok">&#10003;</span> objective met &mdash; seeded proof recovered from dc01</div>
+      </div>
+      <div class="gcol b reveal">
+        <h3><span class="b">Blue</span> scores on real defense</h3>
+        <p>Points for detecting the move, containing the active path, and keeping graded services answering &mdash; measured, not asserted.</p>
+        <div class="gated"><span class="ok">&#10003;</span> lateral path cut &middot; app01 isolated &middot; SLA held</div>
+      </div>
+    </div>
+    <div class="mediation reveal"><b>Mediation plane.</b> Both cells act on the same seeded network through a mediation layer that watches every move, resolves attack against defense deterministically, keeps the answer key server-side, and settles each contested outcome into the shared board &mdash; so the score is the ground truth, not either side's claim.</div>
+
+    <!-- loadout draft -->
+    <h2 class="sec reveal" style="margin-top:46px">Draft your loadout. Spend the prep window.</h2>
+    <p class="sec-lede reveal">Before the clock starts, each cell drafts real capabilities against a fixed budget &mdash; then gets a prep window to deploy them. Every pick buys an edge and costs something else.</p>
+    <div class="draftbox reveal">
+      <div class="dh"><span>PRE-GAME LOADOUT &middot; draft + prep</span><span class="budget">budget 100 pts &middot; 4 picks</span></div>
+      <div class="picks">
+        <div class="pick b"><div class="pt"><span class="nm">EDR agent</span><span class="cost">30</span></div><div class="tr">Fast detection on endpoints. <span class="minus">&minus; noisy; red can see it's deployed.</span></div></div>
+        <div class="pick b"><div class="pt"><span class="nm">Honeypot</span><span class="cost">15</span></div><div class="tr">Lures and flags intruders early. <span class="minus">&minus; a wrong trip wastes a response.</span></div></div>
+        <div class="pick r"><div class="pt"><span class="nm">Zero-day</span><span class="cost">45</span></div><div class="tr">Skips a hardened gate outright. <span class="minus">&minus; one-shot; burns loud.</span></div></div>
+        <div class="pick r"><div class="pt"><span class="nm">Stealth kit</span><span class="cost">25</span></div><div class="tr">Suppresses telemetry on the path. <span class="minus">&minus; slower; less firepower.</span></div></div>
+      </div>
+    </div>
+
+    <!-- ends in a hotwash -->
+    <h2 class="sec reveal" style="margin-top:46px">Every arena ends in a facilitated hotwash.</h2>
+    <p class="sec-lede reveal">The moment the clock stops, the engagement journal becomes an after-action report &mdash; a detection / response / recovery scorecard and an owned improvement plan.</p>
+    <div class="hw-teaser">
+      <div class="reveal">
+        <div class="statband" style="margin-top:0;grid-template-columns:repeat(3,1fr)">
+          <div class="st2"><b class="b">71%</b><span>detection</span></div>
+          <div class="st2"><b class="b">t13</b><span>mean response</span></div>
+          <div class="st2"><b class="r">1 lost</b><span>recovery</span></div>
+        </div>
+        <div class="kv" style="margin-top:14px">
+          <span class="chip b">detect: contained 2 of 3 paths</span>
+          <span class="chip b">respond: SLA held</span>
+          <span class="chip r">recover: dc01 fell at t28</span>
+        </div>
+      </div>
+      <div class="aar reveal">
+        <span class="vb">RED EDGES IT</span> &nbsp;<span style="color:var(--mut)">1 jewel of 3 &middot; t28</span>
+        <div class="q"><b>What to fix?</b><br>East-west visibility caught the pivot but not the admin logon &mdash; and the decoy was never armed.</div>
+        <div class="fix"><span class="pri">[HIGH]</span> Add admin-tier logon detection<br><span style="color:var(--faint)">owner Detection Eng. &middot; T1078 &middot; done when caught by t20</span></div>
+        <div class="fix"><span class="pri">[MED]</span> Draft the honeypot next time<br><span style="color:var(--faint)">owner Blue lead &middot; arm decoy in prep window</span></div>
       </div>
     </div>
   </div></section>
@@ -454,6 +658,37 @@
       }, reduce?0:(ix*900)); });
     });},{threshold:.3});
     mio.observe(mw);
+  }
+
+  // live arena observer board: flows fire in sequence, jewel falls, timeline streams
+  var aw = document.getElementById('amapwrap');
+  if(aw){
+    var astream = document.getElementById('astream');
+    var seq = [
+      {t:'t02', flow:'af1', node:'an1', hot:1, html:'<span class="r">RED</span> gains a foothold on web01'},
+      {t:'t05', flow:'df2', html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
+      {t:'t08', flow:'af4', html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>, path dead-ends'},
+      {t:'t11', flow:'af2', node:'an2', hot:1, html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
+      {t:'t16', flow:'df1', html:'<span class="b">BLUE</span> isolates app01 &mdash; <span class="cut">lateral path cut, +def</span>'},
+      {t:'t22', flow:'af3', node:'an3', hot:1, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
+      {t:'t28', node:'an3', fell:1, html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">crown jewel falls</span>'}
+    ];
+    var aio = new IntersectionObserver(function(es){es.forEach(function(x){
+      if(!x.isIntersecting) return; aio.unobserve(x.target);
+      seq.forEach(function(s,ix){ setTimeout(function(){
+        if(s.flow){ var f=document.getElementById(s.flow); if(f) f.classList.add('on'); }
+        if(s.node){ var n=document.getElementById(s.node); if(n){
+          if(s.fell){ n.classList.remove('hot'); n.classList.add('fell'); var p=n.querySelector('.pulse'); if(p) p.classList.remove('on'); }
+          else { n.classList.add('hot'); var pu=n.querySelector('.pulse'); if(pu) pu.classList.add('on'); }
+        }}
+        if(astream){ var d=document.createElement('div'); d.className='row';
+          d.innerHTML='<span class="tk">'+s.t+'</span><span>'+s.html+'</span>';
+          astream.appendChild(d);
+          while(astream.children.length>4) astream.removeChild(astream.firstChild);
+        }
+      }, reduce?0:(ix*1100)); });
+    });},{threshold:.25});
+    aio.observe(aw);
   }
 
   var cmd = './hotwash engage serve --scenario zero-hour';
