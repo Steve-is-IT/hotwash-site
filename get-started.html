@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('hotwash-theme');document.documentElement.dataset.theme=(t==='light'||t==='dark')?t:'dark';}catch(e){document.documentElement.dataset.theme='dark';}</script>
+<title>Get started — hotwa.sh</title>
+<meta name="description" content="Get Hotwash running: request access, install the offline hotwash Python package, and serve a live arena in one command. The draft to prep to live to hotwash flow, with the console links it prints.">
+<link rel="canonical" href="https://hotwa.sh/get-started.html">
+<meta name="theme-color" content="#0a1a2f">
+<meta property="og:title" content="Get started — hotwa.sh">
+<meta property="og:description" content="Request access, install the offline hotwash package, and serve a live red-vs-blue arena in one command.">
+<meta property="og:url" content="https://hotwa.sh/get-started.html">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .ghero{padding:64px 0 10px}
+  h1.big{font-size:clamp(34px,6vw,58px);font-weight:900;line-height:1.02;margin:16px 0 0}
+  .step-h{display:flex;gap:12px;align-items:baseline;margin-top:8px}
+  .step-h .idx{font-family:var(--mono);font-size:12px;color:var(--blue);letter-spacing:.1em}
+  .step-h h3{font-size:20px;margin:0}
+  .step-body{margin:10px 0 0;color:var(--ink-2);font-size:14px;max-width:72ch}
+  .step-body code.inline{font-family:var(--mono);font-size:12.5px;background:color-mix(in srgb,var(--blue) 14%,transparent);color:var(--ink);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+  .block{margin-top:14px}
+  .stepwrap{border-top:1px solid var(--line);padding:24px 0}
+  .stepwrap:first-of-type{border-top:0}
+  /* flow */
+  .flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:26px}
+  @media(max-width:820px){.flow{grid-template-columns:1fr 1fr}}
+  @media(max-width:460px){.flow{grid-template-columns:1fr}}
+  .fstep{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative}
+  .fstep .n{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.1em}
+  .fstep h3{font-size:15px;margin:8px 0 5px}
+  .fstep p{font-size:12.5px;color:var(--mut);margin:0}
+  /* console links */
+  .links-out{margin-top:16px;display:grid;gap:8px}
+  .lo{display:flex;gap:12px;align-items:baseline;font-family:var(--mono);font-size:12.5px;color:var(--ink-2);
+    border:1px solid var(--line);border-radius:9px;padding:10px 13px;background:var(--panel)}
+  .lo .k{color:var(--blue);min-width:112px}
+  .lo .k.r{color:var(--red)} .lo .k.b{color:var(--blue)}
+  /* request box */
+  .request{margin-top:26px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:24px;box-shadow:inset 3px 0 0 var(--blue)}
+  .request h3{font-size:20px;margin:0 0 8px}
+  .request p{color:var(--ink-2);font-size:14px;margin:0 0 16px;max-width:64ch}
+  .note{margin-top:16px;font-family:var(--mono);font-size:12px;color:var(--ink-2);background:var(--elev);
+    border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:8px;padding:12px 14px;line-height:1.7}
+  .note b{color:var(--amber);font-weight:600}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="bar">
+  <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+  <span class="badge">v0.1 · free core</span>
+  <span class="spacer"></span>
+  <nav class="links" id="primary-nav" aria-label="Primary">
+    <a href="/#modes">Modes</a><a href="/#arena">Live arena</a><a href="/#scenarios">Scenarios</a><a href="/#scale">Cohorts</a><a href="/pricing.html">Pricing</a><a href="/get-started.html" aria-current="page">Get started</a>
+  </nav>
+  <button class="themetoggle" id="themetoggle" type="button" aria-pressed="false" aria-label="Switch to light theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="cta" href="#request">Request access</a>
+  <button class="navtoggle" id="navtoggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span>
+  </button>
+</div></header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="ghero" style="border-top:0" aria-labelledby="gh-h"><div class="wrap">
+    <p class="eyebrow"><span class="bk">[</span> get hotwash running <span class="bk">]</span></p>
+    <h1 class="big" id="gh-h">Request access. Install. <span class="b">Serve a range.</span></h1>
+    <p class="lede">Hotwash is the <code style="font-family:var(--mono);font-size:.85em">hotwash</code> Python package &mdash; offline-first, one process, no internet at match time. It is a licensed product rather than a public download, so &ldquo;get Hotwash&rdquo; means <strong>request access, then install</strong>. Once you have the bundle, a live red-vs-blue arena is one command away.</p>
+    <div class="trust">
+      <span><b>Python</b> 3.11+</span><span><b>One</b> process</span><span><b>Offline</b> / air-gapped</span><span><b>Zero</b> player setup</span>
+    </div>
+  </div></section>
+
+  <!-- STEPS -->
+  <section aria-labelledby="steps-h"><div class="wrap">
+    <p class="sec-k reveal">// from zero to a live arena</p>
+    <h2 class="sec reveal" id="steps-h">Three steps to the first match.</h2>
+
+    <div class="stepwrap reveal">
+      <div class="step-h"><span class="idx">01</span><h3>Get access &amp; the offline bundle</h3></div>
+      <p class="step-body">Hotwash ships as a signed offline package with its content bundles &mdash; not from public PyPI. <a href="#request" style="color:var(--blue)">Request access</a> and you receive the <code class="inline">hotwash</code> wheel plus the scenario bundles for your tier.</p>
+    </div>
+
+    <div class="stepwrap reveal">
+      <div class="step-h"><span class="idx">02</span><h3>Install into a virtualenv</h3></div>
+      <p class="step-body">Create a Python 3.11+ virtualenv and install the package you were given. Nothing phones home.</p>
+      <pre class="cmdblock block"><code><span class="p">$</span> python -m venv .venv
+<span class="p">$</span> . .venv/bin/activate
+<span class="p">$</span> pip install hotwash          <span class="c"># from your access bundle / private index</span>
+<span class="p">$</span> hotwash arena list            <span class="c"># confirm the install + list seeded scenarios</span></code></pre>
+    </div>
+
+    <div class="stepwrap reveal">
+      <div class="step-h"><span class="idx">03</span><h3>Serve an arena in one command</h3></div>
+      <p class="step-body">The console tier runs the whole arena &mdash; red/blue consoles, the observer attack map, the organizer controls and the hotwash report &mdash; from a single process. Open a pre-game loadout draft with <code class="inline">--draft-budget</code>.</p>
+      <pre class="cmdblock block"><code><span class="p">$</span> hotwash arena serve <span class="fl">--scenario</span> crossfire <span class="fl">--draft-budget</span> 200</code></pre>
+      <p class="step-body">For the own-kit / digital-twin tier, back the objectives with real isolated containers from an offline bundle dir &mdash; the same command, a different backend:</p>
+      <pre class="cmdblock block"><code><span class="p">$</span> hotwash arena serve <span class="fl">--scenario</span> crossfire \
+    <span class="fl">--backend</span> container <span class="fl">--bundle-dir</span> /opt/hotwash/images <span class="fl">--port</span> 8095</code></pre>
+    </div>
+  </div></section>
+
+  <!-- WHAT IT PRINTS -->
+  <section aria-labelledby="links-h"><div class="wrap">
+    <div class="sechead">
+      <div class="sh-l"><p class="sec-k reveal">// what it prints</p>
+      <h2 class="sec reveal" id="links-h">It hands you the links and tokens.</h2></div>
+      <p class="sec-lede reveal">On start, the server prints the lobby URL, the per-role console links with their tokens, the observer-board URL, and the organizer token. Hand each side its link; put the observer board on the projector.</p>
+    </div>
+    <div class="links-out reveal" aria-label="Example console links the server prints">
+      <div class="lo"><span class="k">lobby</span><span>http://localhost:8095/arena/&lt;id&gt;</span></div>
+      <div class="lo"><span class="k r">red console</span><span>http://localhost:8095/arena/&lt;id&gt;/red?token=&hellip;</span></div>
+      <div class="lo"><span class="k b">blue console</span><span>http://localhost:8095/arena/&lt;id&gt;/blue?token=&hellip;</span></div>
+      <div class="lo"><span class="k">observer</span><span>http://localhost:8095/arena/&lt;id&gt;/observer</span></div>
+      <div class="lo"><span class="k">organizer</span><span>token &middot; opens prep / begin / inject controls</span></div>
+    </div>
+    <p class="note reveal"><b>&#9873; run it hostile.</b> Run the server behind your range&rsquo;s own reverse proxy / TLS for anything beyond localhost, and keep every target sandboxed &mdash; isolated network, resource-capped, ephemeral. Nothing is pulled from the internet at match time, and the answer key never leaves the server.</p>
+  </div></section>
+
+  <!-- FLOW -->
+  <section aria-labelledby="flow-h"><div class="wrap">
+    <p class="sec-k reveal">// the match flow</p>
+    <h2 class="sec reveal" id="flow-h">Draft &rarr; prep &rarr; live &rarr; hotwash.</h2>
+    <div class="flow">
+      <div class="fstep reveal"><p class="n">01 &middot; DRAFT</p><h3>Spend the budget</h3><p>With a draft budget, each cell drafts its loadout of real capabilities in its console.</p></div>
+      <div class="fstep reveal"><p class="n">02 &middot; PREP</p><h3>Open prep</h3><p>The organizer calls Open prep; teams deploy and harden &mdash; the availability checker is already running.</p></div>
+      <div class="fstep reveal"><p class="n">03 &middot; LIVE</p><h3>Begin match</h3><p>Begin the match. Red works the kill chain, blue detects and contains, the white cell fires injects.</p></div>
+      <div class="fstep reveal"><p class="n">04 &middot; HOTWASH</p><h3>Debrief</h3><p>At the clock, the journal becomes a facilitated after-action report with a per-operator scorecard.</p></div>
+    </div>
+    <div class="kv reveal" style="margin-top:18px">
+      <span class="chip">hotwash arena list</span>
+      <span class="chip">--tick-seconds &lt;n&gt;</span>
+      <span class="chip">--duration-ticks &lt;n&gt;</span>
+      <span class="chip">--live</span>
+      <span class="chip b">GET /arenas/&lt;id&gt;/report.html</span>
+    </div>
+  </div></section>
+
+  <!-- REQUEST ACCESS -->
+  <section id="request" aria-labelledby="req-h"><div class="wrap">
+    <p class="sec-k reveal">// get hotwash</p>
+    <h2 class="sec reveal" id="req-h">Request access.</h2>
+    <div class="request reveal">
+      <h3>Tell us about the room</h3>
+      <p>Hotwash is licensed, not a public download. Tell us your tier &mdash; Community / Education, Console, or own-kit Digital twin &mdash; your cohort size, and whether you need container- or VM-backed targets. We will get you the offline bundle and a hand with the first match.</p>
+      <div class="btnrow" style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn primary" href="mailto:hello@hotwa.sh?subject=Hotwash%20access%20request">Email hello@hotwa.sh</a>
+        <a class="btn ghost" href="/pricing.html">Compare the tiers</a>
+      </div>
+    </div>
+    <p class="note reveal"><b>&#10003; offline by design.</b> Every tier runs air-gapped; content ships as signed offline bundles and grading is server-side, so the answer key never reaches a player.</p>
+  </div></section>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+        <p class="foot-tag">The range that fights back. Red-team CTF, blue-team detection, and live red-vs-blue on one seeded, offline-first engine.</p>
+        <p class="foot-coll">Part of <a href="https://competencecollective.org">The Competence Collective</a>.</p>
+      </div>
+      <nav class="fcol" aria-label="Product">
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#arena">Live arena</a></li>
+          <li><a href="/#scenarios">Scenarios</a></li>
+          <li><a href="/#scale">Cohorts</a></li>
+          <li><a href="/#tiers">Deploy</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="Get it">
+        <h2>Get it</h2>
+        <ul>
+          <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/get-started.html">Get started</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Hotwash &middot; hotwa.sh</span>
+      <span class="wm">hotwa<span class="dot">.sh</span></span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>

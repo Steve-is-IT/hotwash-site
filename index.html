@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('hotwash-theme');document.documentElement.dataset.theme=(t==='light'||t==='dark')?t:'dark';}catch(e){document.documentElement.dataset.theme='dark';}</script>
 <title>hotwa.sh — the cyber range that fights back</title>
 <meta name="description" content="Hotwash runs red-team CTF, blue-team detection CTF, and live red-vs-blue on one seeded, server-graded, offline-first engine. Uncopyable per-team flags, verify-before-release, and a facilitated after-action hotwash.">
 <link rel="canonical" href="https://hotwa.sh/">
@@ -14,6 +15,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
 <style>
   /* Steel palette (matches the platform) + DEFCON energy: terminal motifs, mono accents, red/blue duality. Dark by design. */
   :root{
@@ -412,8 +414,12 @@
   <span class="badge">v0.1 · free core</span>
   <span class="spacer"></span>
   <nav class="links" id="primary-nav" aria-label="Primary">
-    <a href="#modes">Modes</a><a href="#arena">Live arena</a><a href="#scenarios">Scenarios</a><a href="#scale">Cohorts</a><a href="#tiers">Deploy</a><a href="#faq">FAQ</a>
+    <a href="#modes">Modes</a><a href="#arena">Live arena</a><a href="#scenarios">Scenarios</a><a href="#scale">Cohorts</a><a href="#tiers">Deploy</a><a href="#faq">FAQ</a><a href="/pricing.html">Pricing</a><a href="/get-started.html">Get started</a>
   </nav>
+  <button class="themetoggle" id="themetoggle" type="button" aria-pressed="false" aria-label="Switch to light theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
   <a class="cta" href="#arena">Watch a match</a>
   <button class="navtoggle" id="navtoggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
     <span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span>
@@ -907,31 +913,50 @@
   </div></section>
 </main>
 
-<footer><div class="wrap">
-  <span>&copy; 2026 Hotwash. Part of <a href="https://competencecollective.org">The Competence Collective</a>.</span>
-  <span class="wm" style="font-size:16px">hotwa<span class="dot">.sh</span></span>
-</div></footer>
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+        <p class="foot-tag">The range that fights back. Red-team CTF, blue-team detection, and live red-vs-blue on one seeded, offline-first engine.</p>
+        <p class="foot-coll">Part of <a href="https://competencecollective.org">The Competence Collective</a>.</p>
+      </div>
+      <nav class="fcol" aria-label="Product">
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#arena">Live arena</a></li>
+          <li><a href="/#scenarios">Scenarios</a></li>
+          <li><a href="/#scale">Cohorts</a></li>
+          <li><a href="/#tiers">Deploy</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="Get it">
+        <h2>Get it</h2>
+        <ul>
+          <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/get-started.html">Get started</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Hotwash &middot; hotwa.sh</span>
+      <span class="wm">hotwa<span class="dot">.sh</span></span>
+    </div>
+  </div>
+</footer>
 
+<script src="/assets/app.js"></script>
 <script>
 (function(){
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  /* mobile nav toggle */
-  var toggle = document.getElementById('navtoggle'), navEl = document.getElementById('primary-nav');
-  if(toggle && navEl){
-    toggle.addEventListener('click', function(){
-      var open = navEl.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
-    });
-    navEl.addEventListener('click', function(e){
-      if(e.target.tagName === 'A'){ navEl.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); toggle.setAttribute('aria-label','Open navigation menu'); }
-    });
-  }
-
-  /* scroll reveal */
-  var io = new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}});},{threshold:.14});
-  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  var navEl = document.getElementById('primary-nav');
 
   /* current-section nav marking (scrollspy) */
   var navLinks = Array.prototype.slice.call(navEl ? navEl.querySelectorAll('a') : []);

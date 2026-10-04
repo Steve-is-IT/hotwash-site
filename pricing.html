@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('hotwash-theme');document.documentElement.dataset.theme=(t==='light'||t==='dark')?t:'dark';}catch(e){document.documentElement.dataset.theme='dark';}</script>
+<title>Pricing — hotwa.sh</title>
+<meta name="description" content="Hotwash deployment tiers: Community/Education, the browser Console tier, and the own-kit Digital-twin tier. All seeded, server-graded and offline-first. Talk to us for access.">
+<link rel="canonical" href="https://hotwa.sh/pricing.html">
+<meta name="theme-color" content="#0a1a2f">
+<meta property="og:title" content="Pricing — hotwa.sh">
+<meta property="og:description" content="Three ways to deploy Hotwash: Community/Education, browser Console, and own-kit Digital twin. Graded identically, offline-first.">
+<meta property="og:url" content="https://hotwa.sh/pricing.html">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* pricing-only layout */
+  .phero{padding:64px 0 10px}
+  h1.big{font-size:clamp(34px,6vw,58px);font-weight:900;line-height:1.02;margin:16px 0 0}
+  .tiers.three{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:900px){.tiers.three{grid-template-columns:1fr}}
+  .tier.feature{border-color:var(--blue-dim);box-shadow:inset 0 3px 0 var(--blue)}
+  .tier .pop{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 45%,transparent);border-radius:999px;padding:3px 9px}
+  .tier .btn{margin-top:18px;width:100%;justify-content:center}
+  .tier ul{margin:0 0 4px}
+  /* comparison table */
+  .cmp{margin-top:26px;overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+  .cmp table{width:100%;border-collapse:collapse;font-size:13px;min-width:600px}
+  .cmp caption{text-align:left;padding:16px 16px 4px;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+  .cmp th,.cmp td{padding:12px 14px;border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+  .cmp thead th{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:400;text-align:center}
+  .cmp thead th:first-child{text-align:left}
+  .cmp tbody th{text-align:left;font-weight:500;color:var(--ink-2)}
+  .cmp tbody td{text-align:center;color:var(--mut);font-family:var(--mono);font-size:12px}
+  .cmp td.y{color:var(--ok);font-weight:600}
+  .cmp td.n{color:var(--faint)}
+  .cmp tr:last-child th,.cmp tr:last-child td{border-bottom:0}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="bar">
+  <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+  <span class="badge">v0.1 · free core</span>
+  <span class="spacer"></span>
+  <nav class="links" id="primary-nav" aria-label="Primary">
+    <a href="/#modes">Modes</a><a href="/#arena">Live arena</a><a href="/#scenarios">Scenarios</a><a href="/#scale">Cohorts</a><a href="/pricing.html" aria-current="page">Pricing</a><a href="/get-started.html">Get started</a>
+  </nav>
+  <button class="themetoggle" id="themetoggle" type="button" aria-pressed="false" aria-label="Switch to light theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="cta" href="/get-started.html#request">Request access</a>
+  <button class="navtoggle" id="navtoggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span>
+  </button>
+</div></header>
+
+<main id="main">
+  <!-- HERO -->
+  <section class="phero" style="border-top:0" aria-labelledby="ph-h"><div class="wrap">
+    <p class="eyebrow"><span class="bk">[</span> deployment tiers <span class="bk">]</span></p>
+    <h1 class="big" id="ph-h">Priced like a security product. <span class="b">Not</span> a toy.</h1>
+    <p class="lede">Hotwash is a licensed platform, so there are no self-serve dollar figures on a page &mdash; the right fit depends on your cohort size, whether you need live targets, and whether teams bring their own kit. Every tier runs on the same seeded engine, grades server-side, and works offline.</p>
+    <div class="pledge" role="list" aria-label="Shared across every tier">
+      <span class="p" role="listitem"><b>&#10003;</b> Seeded &amp; uncopyable</span>
+      <span class="p" role="listitem"><b>&#10003;</b> Verify-before-release</span>
+      <span class="p" role="listitem"><b>&#10003;</b> Server-side grading</span>
+      <span class="p" role="listitem"><b>&#10003;</b> Offline / air-gapped</span>
+    </div>
+  </div></section>
+
+  <!-- TIERS -->
+  <section aria-labelledby="tiers-h"><div class="wrap">
+    <p class="sec-k reveal">// three ways to run it</p>
+    <h2 class="sec reveal" id="tiers-h">Pick the tier that matches the room.</h2>
+    <div class="tiers three">
+      <div class="tier reveal">
+        <p class="tk">tier 00 &middot; community / education</p>
+        <h3>Community &amp; Education</h3>
+        <p>Seeded red-team and blue-team CTF for a single analyst, a capstone, or a whole class &mdash; offline, on your own lab hardware.</p>
+        <ul>
+          <li>Seeded red-team + blue detection CTF</li>
+          <li>Per-student uncopyable variants</li>
+          <li>Classroom rostering over LTI 1.3</li>
+          <li>Authoring DSL for your own ranges</li>
+          <li>Runs fully offline / air-gapped</li>
+        </ul>
+        <p class="foot">&#10003; free core for education</p>
+        <a class="btn ghost" href="/get-started.html#request">Request access</a>
+      </div>
+      <div class="tier feature reveal">
+        <span class="pop">most teams start here</span>
+        <p class="tk">tier 01 &middot; console</p>
+        <h3>Console</h3>
+        <p>The accessible team product: red, blue and observer consoles in the browser, cohorts, the live arena, and a facilitated hotwash &mdash; zero player setup.</p>
+        <ul>
+          <li>All three modes, incl. live red-vs-blue</li>
+          <li>Multi-team cohorts + live leaderboard</li>
+          <li>Live attack map built for the room</li>
+          <li>White-cell injects &amp; organizer console</li>
+          <li>Per-operator hotwash AARs</li>
+          <li>Persistence &amp; frame-by-frame replay</li>
+        </ul>
+        <p class="foot">&#10003; grades on the mediation plane</p>
+        <a class="btn primary" href="/get-started.html#request">Talk to us</a>
+      </div>
+      <div class="tier reveal">
+        <p class="tk">tier 02 &middot; digital twin</p>
+        <h3>Own-kit / Digital twin</h3>
+        <p>The premium tier: both sides work from their own tools against real, container- or VM-backed infrastructure, with blue holding admin and pulling a live feed into its own SIEM.</p>
+        <ul>
+          <li>Everything in Console</li>
+          <li>Bring your real offensive + defensive stack</li>
+          <li>Container- or VM-backed live targets</li>
+          <li>Blue admin on hosts; live SIEM feed</li>
+          <li>Air-gapped deployment support</li>
+          <li>Facilitated AARs as deliverables</li>
+        </ul>
+        <p class="foot">&#10003; identical server-side scoring</p>
+        <a class="btn ghost" href="/get-started.html#request">Talk to us</a>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- COMPARISON -->
+  <section aria-labelledby="cmp-h"><div class="wrap">
+    <div class="sechead">
+      <div class="sh-l"><p class="sec-k reveal">// what each tier includes</p>
+      <h2 class="sec reveal" id="cmp-h">One engine, graded the same. The tier changes the reach.</h2></div>
+      <p class="sec-lede reveal">Seeded determinism, verify-before-release, server-side grading and offline operation are not tier features &mdash; they hold everywhere. What changes is how players connect and whether they bring their own kit.</p>
+    </div>
+    <div class="cmp reveal">
+      <table>
+        <caption>Capability by tier</caption>
+        <thead>
+          <tr><th scope="col">Capability</th><th scope="col">Community</th><th scope="col">Console</th><th scope="col">Digital twin</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Three modes (red / blue / live)</th><td>red + blue</td><td class="y">all three</td><td class="y">all three</td></tr>
+          <tr><th scope="row">Seeded, uncopyable variants</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Verify-before-release</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Server-side grading</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Browser consoles</th><td class="n">&mdash;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Cohorts &amp; live leaderboard</th><td>classroom</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Live attack map</th><td class="n">&mdash;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">White-cell injects</th><td class="n">&mdash;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Per-operator hotwash</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Own-kit / digital twin</th><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Live telemetry feed into your SIEM</th><td class="n">&mdash;</td><td class="n">&mdash;</td><td class="y">&#10003;</td></tr>
+          <tr><th scope="row">Offline / air-gapped</th><td class="y">&#10003;</td><td class="y">&#10003;</td><td class="y">&#10003;</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></section>
+
+  <!-- FAQ -->
+  <section aria-labelledby="pfaq-h"><div class="wrap">
+    <p class="sec-k reveal">// licensing &amp; deployment</p>
+    <h2 class="sec reveal" id="pfaq-h">The honest answers.</h2>
+    <div class="faq reveal">
+      <details><summary>Why no price on the page?</summary><p>Hotwash is a licensed platform sold like a security product, not a self-serve SaaS. Scope depends on cohort size, whether you need live sandboxed or container-backed targets, and support level &mdash; so we size it with you rather than printing a number that would be wrong for most of you.</p></details>
+      <details><summary>Does every tier run offline / air-gapped?</summary><p>Yes. Targets, consoles and scoring run air-gapped on all tiers; challenge content ships as signed offline bundles, and nothing is pulled from the internet at match time. The Digital-twin tier is designed to stand up inside an isolated range network.</p></details>
+      <details><summary>Do all tiers grade the same way?</summary><p>Yes. Grading is server-side on the mediation plane for every tier, so a result on the Console tier means the same thing as the same result on the Digital-twin tier. Moving up a tier changes reach and realism, never the scoring.</p></details>
+      <details><summary>Is there an education discount?</summary><p>The Community / Education tier is the free core for schools and training providers &mdash; per-student seeded variants, LTI rostering and offline operation. Request access and tell us about your cohort.</p></details>
+      <details><summary>Can we author and run our own scenarios?</summary><p>Yes &mdash; a documented DSL and authoring guide ship on every tier, and the engine validates and verifies every scenario (the independent solver must recover every flag) before it can be served.</p></details>
+    </div>
+  </div></section>
+
+  <!-- CTA -->
+  <section aria-labelledby="pcta-h"><div class="ctaband reveal">
+    <p class="sec-k" style="color:var(--mut)">// find your tier</p>
+    <h2 id="pcta-h">Tell us about the room.</h2>
+    <p class="sub">A class, a SOC, a CTF, or a full digital-twin exercise &mdash; we will point you at the right tier and get you running.</p>
+    <div class="run"><span class="p">&#10095;</span> hotwash arena serve <span style="color:var(--mut)">--scenario crossfire --draft-budget 200</span></div>
+    <div class="btnrow">
+      <a class="btn primary" href="/get-started.html#request">Request access</a>
+      <a class="btn ghost" href="/get-started.html">Get started</a>
+    </div>
+  </div></section>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+        <p class="foot-tag">The range that fights back. Red-team CTF, blue-team detection, and live red-vs-blue on one seeded, offline-first engine.</p>
+        <p class="foot-coll">Part of <a href="https://competencecollective.org">The Competence Collective</a>.</p>
+      </div>
+      <nav class="fcol" aria-label="Product">
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#arena">Live arena</a></li>
+          <li><a href="/#scenarios">Scenarios</a></li>
+          <li><a href="/#scale">Cohorts</a></li>
+          <li><a href="/#tiers">Deploy</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="Get it">
+        <h2>Get it</h2>
+        <ul>
+          <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/get-started.html">Get started</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Hotwash &middot; hotwa.sh</span>
+      <span class="wm">hotwa<span class="dot">.sh</span></span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>
