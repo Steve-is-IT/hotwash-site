@@ -206,10 +206,21 @@
   .frontmap .arc{stroke:var(--red);stroke-width:2.5;fill:none;stroke-dasharray:6 5;stroke-dashoffset:260;opacity:0}
   .frontmap .arc.on{opacity:1;animation:dash 1.1s linear forwards}
   @keyframes dash{to{stroke-dashoffset:0}}
+  .frontmap .darc{stroke:var(--blue);stroke-width:2.5;fill:none;stroke-dasharray:6 5;stroke-dashoffset:260;opacity:0}
+  .frontmap .darc.on{opacity:1;animation:dash 1.1s linear forwards}
   .frontmap .node{transition:.3s}
   .frontmap .node.hot circle{stroke:var(--red);fill:#241216}
   .frontmap .node.hot text{fill:var(--red)}
-  @media(prefers-reduced-motion:reduce){.frontmap .arc{opacity:1;stroke-dashoffset:0;animation:none}}
+  .frontmap .node.held circle{stroke:var(--gold);fill:#2a1512;stroke-width:2.5}
+  .frontmap .node.held text{fill:var(--gold)}
+  .frontmap .node.def circle{stroke:var(--blue);fill:#10233f}
+  .frontmap .node.def text{fill:var(--blue)}
+  .frontmap .decoyring{fill:none;stroke:var(--blue);stroke-width:2;stroke-dasharray:4 4;opacity:0;transition:.4s}
+  .frontmap .node.decoy .decoyring{opacity:.85}
+  .frontmap .node.decoy circle{stroke:var(--blue)} .frontmap .node.decoy text{fill:var(--blue)}
+  .frontmap .node.iso{opacity:.55} .frontmap .node.iso circle{stroke:var(--blue);stroke-dasharray:3 3} .frontmap .node.iso text{fill:var(--blue)}
+  .frontmap .shield{opacity:0;transition:.4s} .frontmap .node.def .shield{opacity:1}
+  @media(prefers-reduced-motion:reduce){.frontmap .arc,.frontmap .darc{opacity:1;stroke-dashoffset:0;animation:none}}
   /* ===== LIVE ARENA ===== */
   .arena-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
   .arena-tag{font-family:var(--mono);font-size:11px;color:var(--ink-2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--panel)}
@@ -476,24 +487,58 @@
     <p class="sec-k reveal">// the main event</p>
     <h2 class="sec reveal" id="live-h">Live attack <span class="b">&amp;</span> defend.</h2>
     <div class="mapwrap reveal" id="mapwrap" style="margin-top:20px">
-      <svg class="frontmap" viewBox="0 0 900 180" role="img" aria-label="Attack-front map: an attacker moves from the internet through the DMZ and internal zones toward the admin zone and crown jewels.">
-        <text class="lbl" x="60" y="16" text-anchor="middle">INTERNET</text>
-        <text class="lbl" x="300" y="16" text-anchor="middle">DMZ</text>
-        <text class="lbl" x="560" y="16" text-anchor="middle">INTERNAL</text>
-        <text class="lbl" x="820" y="16" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
-        <rect class="lane" x="230" y="28" width="140" height="130" rx="10"/>
-        <rect class="lane" x="490" y="28" width="140" height="130" rx="10"/>
-        <rect class="lane" x="740" y="28" width="140" height="130" rx="10"/>
-        <line class="edge" x1="78" y1="93" x2="282" y2="93"/>
-        <line class="edge" x1="318" y1="93" x2="542" y2="93"/>
-        <line class="edge" x1="578" y1="93" x2="802" y2="93"/>
-        <path class="arc" id="arc1" d="M78 93 H300"/>
-        <path class="arc" id="arc2" d="M300 93 H560"/>
-        <path class="arc" id="arc3" d="M560 93 H820"/>
-        <g class="node" id="n0"><circle cx="60" cy="93" r="16" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="60" y="121" text-anchor="middle" fill="var(--faint)">red</text></g>
-        <g class="node" id="n1"><circle cx="300" cy="93" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="300" y="97" text-anchor="middle" fill="var(--mut)">web01</text></g>
-        <g class="node" id="n2"><circle cx="560" cy="93" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="560" y="97" text-anchor="middle" fill="var(--mut)">app01</text></g>
-        <g class="node" id="n3"><circle cx="820" cy="93" r="20" fill="#0e1620" stroke="#caa23a"/><text class="hostname" x="820" y="97" text-anchor="middle" fill="var(--gold)">dc01</text></g>
+      <svg class="frontmap" viewBox="0 0 1010 330" role="img" aria-label="Attack-front map. Two internet entry points feed a seeded network of four zones. Red branches across them: it forks from the DMZ (web01, vpn01) into the internal zone (app01, files01, hr01) and captures the domain controller dc01 in the admin zone. Blue defends in parallel: it isolates files01 to cut a lateral path, trips a decoy on hr01, and holds the secrets vault vault01.">
+        <text class="lbl" x="60" y="22" text-anchor="middle">INTERNET</text>
+        <text class="lbl" x="290" y="22" text-anchor="middle">DMZ</text>
+        <text class="lbl" x="555" y="22" text-anchor="middle">INTERNAL</text>
+        <text class="lbl" x="815" y="22" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
+        <rect class="lane" x="215" y="36" width="150" height="252" rx="12"/>
+        <rect class="lane" x="470" y="36" width="170" height="252" rx="12"/>
+        <rect class="lane" x="725" y="36" width="180" height="252" rx="12"/>
+
+        <!-- structural topology (grey) -->
+        <g stroke-linecap="round">
+          <line class="edge" x1="60" y1="165" x2="290" y2="110"/>
+          <line class="edge" x1="60" y1="165" x2="290" y2="225"/>
+          <line class="edge" x1="290" y1="110" x2="555" y2="90"/>
+          <line class="edge" x1="290" y1="110" x2="555" y2="170"/>
+          <line class="edge" x1="290" y1="110" x2="555" y2="252"/>
+          <line class="edge" x1="290" y1="225" x2="555" y2="170"/>
+          <line class="edge" x1="555" y1="90" x2="815" y2="115"/>
+          <line class="edge" x1="555" y1="170" x2="815" y2="215"/>
+        </g>
+
+        <!-- red attack branches -->
+        <path class="arc" id="ra1" d="M60 165 L290 110"/>
+        <path class="arc" id="ra2" d="M60 165 L290 225"/>
+        <path class="arc" id="ra3" d="M290 110 L555 90"/>
+        <path class="arc" id="ra4" d="M290 110 L555 170"/>
+        <path class="arc" id="ra5" d="M555 90 L815 115"/>
+        <!-- blue defensive responses (reach across from the SOC) -->
+        <path class="darc" id="ba1" d="M950 165 L555 170"/>
+        <path class="darc" id="ba2" d="M950 165 L555 252"/>
+        <path class="darc" id="ba3" d="M950 165 L815 215"/>
+
+        <!-- origins -->
+        <g class="node origin red" id="nred"><circle cx="60" cy="165" r="16" fill="#241216" stroke="var(--red)"/><text class="hostname" x="60" y="196" text-anchor="middle" fill="var(--red)">red</text></g>
+        <g class="node origin blue" id="nblue"><circle cx="950" cy="165" r="16" fill="#10233f" stroke="var(--blue)"/><text class="hostname" x="950" y="196" text-anchor="middle" fill="var(--blue)">blue</text></g>
+
+        <!-- endpoints -->
+        <g class="node" id="nweb"><circle cx="290" cy="110" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="290" y="114" text-anchor="middle" fill="var(--mut)">web01</text></g>
+        <g class="node" id="nvpn"><circle cx="290" cy="225" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="290" y="229" text-anchor="middle" fill="var(--mut)">vpn01</text></g>
+        <g class="node" id="napp"><circle cx="555" cy="90" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="555" y="94" text-anchor="middle" fill="var(--mut)">app01</text></g>
+        <g class="node" id="nfiles"><circle class="decoyring" cx="555" cy="170" r="26"/><circle cx="555" cy="170" r="20" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="555" y="174" text-anchor="middle" fill="var(--mut)">files01</text></g>
+        <g class="node" id="nhr"><circle class="decoyring" cx="555" cy="252" r="24"/><circle cx="555" cy="252" r="18" fill="#0e1620" stroke="var(--line-2)"/><text class="hostname" x="555" y="256" text-anchor="middle" fill="var(--mut)">hr01</text></g>
+        <g class="node jewel" id="ndc"><circle cx="815" cy="115" r="22" fill="#0e1620" stroke="var(--gold)"/><text class="hostname" x="815" y="112" text-anchor="middle" fill="var(--gold)">dc01</text><text class="hostname" x="815" y="124" text-anchor="middle" fill="#8a7320" style="font-size:8px">jewel</text></g>
+        <g class="node jewel" id="nvault"><circle cx="815" cy="215" r="22" fill="#0e1620" stroke="var(--gold)"/><path class="shield" d="M838 196 l11 3 v7 c0 6 -6 8 -11 10 c-5 -2 -11 -4 -11 -10 v-7 z" fill="var(--blue)" stroke="#0e1620"/><text class="hostname" x="815" y="212" text-anchor="middle" fill="var(--gold)">vault01</text><text class="hostname" x="815" y="224" text-anchor="middle" fill="#8a7320" style="font-size:8px">jewel</text></g>
+
+        <!-- legend -->
+        <g class="legend" aria-hidden="true" transform="translate(60,312)">
+          <line x1="0" y1="0" x2="26" y2="0" stroke="var(--red)" stroke-width="2.5" stroke-dasharray="6 5"/><text class="lbl" x="33" y="4">attack</text>
+          <line x1="150" y1="0" x2="176" y2="0" stroke="var(--blue)" stroke-width="2.5" stroke-dasharray="6 5"/><text class="lbl" x="183" y="4">detect / contain</text>
+          <circle cx="360" cy="0" r="6" fill="#2a1512" stroke="var(--gold)"/><text class="lbl" x="373" y="4">captured</text>
+          <circle cx="500" cy="0" r="6" fill="none" stroke="var(--blue)" stroke-dasharray="3 3"/><text class="lbl" x="513" y="4">decoy</text>
+        </g>
       </svg>
     </div>
     <div class="live">
@@ -836,11 +881,22 @@
   if(mw){
     var mio = new IntersectionObserver(function(es){es.forEach(function(x){
       if(!x.isIntersecting) return; mio.unobserve(x.target);
-      var seq=[['arc1','n1'],['arc2','n2'],['arc3','n3']];
+      var seq=[
+        {a:'ra1',n:'nweb',c:'hot'},    // red takes the web box
+        {a:'ra2',n:'nvpn',c:'hot'},    // ...and a second door via VPN
+        {a:'ra3',n:'napp',c:'hot'},    // branch: web01 -> app01
+        {a:'ra5',n:'ndc',c:'held'},    // app01 -> dc01, crown jewel falls
+        {a:'ra4',n:'nfiles',c:'hot'},  // branch: web01 -> files01
+        {d:'ba1',n:'nfiles',c:'iso'},  // BLUE isolates files01, cutting the vault route
+        {d:'ba2',n:'nhr',c:'decoy'},   // BLUE decoy on hr01 trips
+        {d:'ba3',n:'nvault',c:'def'}   // BLUE holds the secrets vault
+      ];
       seq.forEach(function(s,ix){ setTimeout(function(){
-        var a=document.getElementById(s[0]), n=document.getElementById(s[1]);
-        if(a) a.classList.add('on'); if(n) n.classList.add('hot');
-      }, reduce?0:(ix*900)); });
+        if(s.a){var a=document.getElementById(s.a); if(a) a.classList.add('on');}
+        if(s.d){var dd=document.getElementById(s.d); if(dd) dd.classList.add('on');}
+        var n=document.getElementById(s.n);
+        if(n){ if(s.c!=='hot') n.classList.remove('hot'); n.classList.add(s.c); }
+      }, reduce?0:(ix*750)); });
     });},{threshold:.3});
     mio.observe(mw);
   }
