@@ -264,6 +264,31 @@
   .amaplegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--mut)}
   .amaplegend i{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:0;margin-right:5px}
   .amaplegend i.r{background:var(--red)} .amaplegend i.b{background:var(--blue)} .amaplegend i.j{background:#caa23a} .amaplegend i.d{background:transparent;border:1px dashed #caa23a}
+  /* observer board: scoreline + crown-jewel status + extra node states */
+  .obvscore{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin:6px 0 14px}
+  .obvscore .team{padding:8px 14px;border-radius:12px;background:#0e1620;border:1px solid var(--line)}
+  .obvscore .team.red{border-bottom:3px solid var(--red)} .obvscore .team.blue{border-bottom:3px solid var(--blue);text-align:right}
+  .obvscore .tname{font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+  .obvscore .team.red .tname{color:var(--red)} .obvscore .team.blue .tname{color:var(--blue)}
+  .obvscore .pts{font-family:var(--disp);font-weight:900;font-size:clamp(26px,5vw,38px);line-height:1;font-variant-numeric:tabular-nums}
+  .obvscore .team.red .pts{color:var(--red)} .obvscore .team.blue .pts{color:var(--blue)}
+  .obvscore .axes{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+  .obvscore .clock{text-align:center;min-width:132px}
+  .obvscore .clock .t{font-family:var(--disp);font-weight:800;font-size:17px;font-variant-numeric:tabular-nums}
+  .obvscore .statepill{font-family:var(--mono);font-size:10px;color:#3ac07e;display:inline-block;margin-top:3px}
+  .obvscore .mom{height:8px;border-radius:99px;background:var(--blue);overflow:hidden;margin-top:8px}
+  .obvscore .mom i{display:block;height:100%;background:var(--red);transition:width .7s ease}
+  .oobj{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-family:var(--mono);font-size:11px}
+  .oobj .k{color:var(--faint);letter-spacing:.12em} .oobj .cnt{color:var(--red);font-weight:700}
+  .oobj .jw{border:1px solid var(--line);border-left:3px solid #caa23a;border-radius:6px;padding:3px 10px;color:var(--mut);transition:.4s}
+  .oobj .jw.cap{border-left-color:var(--red);color:var(--red);background:#1a0f12}
+  .oobj .jw.def{border-left-color:var(--blue);color:var(--blue);background:#0f1b2e}
+  .amap .node.def .ring{stroke:var(--blue);fill:#10233f} .amap .node.def .host{fill:var(--blue)}
+  .amap .node.decoy .ring{stroke:var(--blue);stroke-dasharray:3 3} .amap .node.decoy .host{fill:var(--blue)}
+  .amap .node.iso{opacity:.55} .amap .node.iso .ring{stroke:var(--blue);stroke-dasharray:3 3} .amap .node.iso .host{fill:var(--blue)}
+  .amap .shield{opacity:0;transition:.4s} .amap .node.def .shield{opacity:1}
+  .pbp{min-height:116px}
+  @media(max-width:620px){.obvscore{grid-template-columns:1fr;gap:8px}.obvscore .team.blue{text-align:left}.obvscore .clock{order:-1}}
   /* streaming timeline */
   .stream{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font-family:var(--mono);font-size:11.5px;display:grid;gap:5px}
   .stream .row{display:flex;gap:9px;align-items:baseline}
@@ -568,28 +593,55 @@
     <!-- live attack map for observers -->
     <div class="amapwrap reveal" id="amapwrap">
       <div class="amaptop"><span>LIVE ARENA &middot; observer board</span><span class="roomtip">&#9679; built for the room &middot; project it</span></div>
-      <svg class="amap" viewBox="0 0 900 250" role="img" aria-label="Live arena observer map: the RED cell on the left attacks the DMZ, internal and admin zones toward the crown jewel dc01; the BLUE cell on the right detects and contains; a decoy host sits off the internal zone.">
-        <text class="zlbl" x="300" y="22" text-anchor="middle">DMZ</text>
-        <text class="zlbl" x="470" y="22" text-anchor="middle">INTERNAL</text>
-        <text class="zlbl" x="660" y="22" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
-        <rect class="lane" x="240" y="34" width="120" height="176" rx="10"/>
-        <rect class="lane" x="410" y="34" width="120" height="176" rx="10"/>
-        <rect class="lane jewel" x="600" y="34" width="120" height="176" rx="10"/>
-        <line class="edge" style="stroke:var(--line)" x1="300" y1="92" x2="470" y2="92"/>
-        <line class="edge" style="stroke:var(--line)" x1="470" y1="92" x2="660" y2="92"/>
-        <line class="edge" style="stroke:var(--line)" x1="470" y1="92" x2="470" y2="162"/>
-        <path class="flow atk" id="af1" d="M92 122 C 160 122 190 92 296 92"/>
-        <path class="flow atk" id="af2" d="M300 92 H 466"/>
-        <path class="flow atk" id="af3" d="M470 92 H 656"/>
-        <path class="flow atk" id="af4" d="M300 92 C 360 92 400 162 466 162"/>
-        <path class="flow def" id="df1" d="M808 150 C 720 150 560 150 474 96"/>
-        <path class="flow def" id="df2" d="M808 150 C 700 150 420 150 304 96"/>
-        <g class="node"><circle class="ring red" cx="70" cy="122" r="26"/><text class="cell" x="70" y="118" text-anchor="middle" fill="var(--red)">RED</text><text class="sub" x="70" y="132" text-anchor="middle">CELL</text></g>
-        <g class="node" id="an1"><circle class="pulse" cx="300" cy="92" r="20"/><circle class="ring host" cx="300" cy="92" r="20"/><text class="host" x="300" y="95" text-anchor="middle">web01</text></g>
-        <g class="node" id="an2"><circle class="pulse" cx="470" cy="92" r="20"/><circle class="ring host" cx="470" cy="92" r="20"/><text class="host" x="470" y="95" text-anchor="middle">app01</text></g>
-        <g class="node" id="an3"><circle class="pulse" cx="660" cy="92" r="22"/><circle class="ring host" cx="660" cy="92" r="22"/><text class="host" x="660" y="88" text-anchor="middle" fill="var(--gold)">dc01</text><text class="sub" x="660" y="100" text-anchor="middle" fill="#caa23a">jewel</text></g>
-        <g class="node"><circle class="ring decoy" cx="470" cy="162" r="18"/><text class="host" x="470" y="165" text-anchor="middle" fill="var(--gold)">hp01</text><text class="sub" x="470" y="192" text-anchor="middle">decoy</text></g>
-        <g class="node"><circle class="ring blue" cx="830" cy="150" r="26"/><text class="cell" x="830" y="146" text-anchor="middle" fill="var(--blue)">BLUE</text><text class="sub" x="830" y="160" text-anchor="middle">CELL</text></g>
+
+      <!-- scoreline: live team points -->
+      <div class="obvscore" aria-hidden="true">
+        <div class="team red"><div class="tname">&#9876; RED CELL</div><div class="pts" id="ored">0</div><div class="axes">access &middot; persistence &middot; stealth</div></div>
+        <div class="clock"><div class="t" id="oclock">t00 / 40</div><div class="statepill" id="ostate">&#9679; LIVE</div><div class="mom"><i id="omom" style="width:50%"></i></div></div>
+        <div class="team blue"><div class="tname">&#128737; BLUE CELL</div><div class="pts" id="oblue">0</div><div class="axes">detect &middot; contain &middot; recover</div></div>
+      </div>
+
+      <!-- crown-jewel status -->
+      <div class="oobj" aria-hidden="true">
+        <span class="k">CROWN JEWELS</span><span class="cnt" id="ojewels">RED 0 / 2</span>
+        <span class="jw" id="oj-dc">dc01</span><span class="jw" id="oj-vault">vault01</span>
+      </div>
+
+      <svg class="amap" viewBox="0 0 1000 250" role="img" aria-label="Live arena observer board. The RED cell breaks in through two DMZ hosts (web01, vpn01) and branches across the internal zone (app01, files01) toward the admin crown jewels; it captures dc01. The BLUE cell detects on web01, trips a decoy on hp01, isolates files01 to cut a lateral path, and defends the secrets vault vault01.">
+        <text class="zlbl" x="305" y="22" text-anchor="middle">DMZ</text>
+        <text class="zlbl" x="555" y="22" text-anchor="middle">INTERNAL</text>
+        <text class="zlbl" x="825" y="22" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
+        <rect class="lane" x="230" y="34" width="150" height="182" rx="11"/>
+        <rect class="lane" x="470" y="34" width="170" height="182" rx="11"/>
+        <rect class="lane jewel" x="740" y="34" width="170" height="182" rx="11"/>
+        <g stroke-linecap="round">
+          <line class="edge" style="stroke:var(--line)" x1="70" y1="120" x2="305" y2="88"/>
+          <line class="edge" style="stroke:var(--line)" x1="70" y1="120" x2="305" y2="168"/>
+          <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="70"/>
+          <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="135"/>
+          <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="195"/>
+          <line class="edge" style="stroke:var(--line)" x1="555" y1="70" x2="825" y2="88"/>
+          <line class="edge" style="stroke:var(--line)" x1="555" y1="135" x2="825" y2="168"/>
+        </g>
+        <path class="flow atk" id="f_rw" d="M94 120 C 180 120 210 88 283 88"/>
+        <path class="flow atk" id="f_rv" d="M94 120 C 190 120 215 168 283 168"/>
+        <path class="flow atk" id="f_wa" d="M327 88 C 420 80 470 70 533 70"/>
+        <path class="flow atk" id="f_wf" d="M327 92 C 430 104 470 135 533 135"/>
+        <path class="flow atk" id="f_wh" d="M327 96 C 430 160 470 195 533 195"/>
+        <path class="flow atk" id="f_ad" d="M577 70 C 680 74 740 88 803 88"/>
+        <path class="flow def" id="f_bw" d="M921 120 C 700 158 470 150 329 92"/>
+        <path class="flow def" id="f_bf" d="M921 120 C 800 135 660 135 577 135"/>
+        <path class="flow def" id="f_bh" d="M921 120 C 800 178 660 195 577 195"/>
+        <path class="flow def" id="f_bv" d="M921 120 C 885 140 855 168 803 168"/>
+        <g class="node"><circle class="ring red" cx="70" cy="120" r="26"/><text class="cell" x="70" y="116" text-anchor="middle" fill="var(--red)">RED</text><text class="sub" x="70" y="130" text-anchor="middle">CELL</text></g>
+        <g class="node" id="an_web"><circle class="pulse" cx="305" cy="88" r="20"/><circle class="ring host" cx="305" cy="88" r="20"/><text class="host" x="305" y="91" text-anchor="middle">web01</text></g>
+        <g class="node" id="an_vpn"><circle class="pulse" cx="305" cy="168" r="20"/><circle class="ring host" cx="305" cy="168" r="20"/><text class="host" x="305" y="171" text-anchor="middle">vpn01</text></g>
+        <g class="node" id="an_app"><circle class="pulse" cx="555" cy="70" r="20"/><circle class="ring host" cx="555" cy="70" r="20"/><text class="host" x="555" y="73" text-anchor="middle">app01</text></g>
+        <g class="node" id="an_files"><circle class="pulse" cx="555" cy="135" r="20"/><circle class="ring host" cx="555" cy="135" r="20"/><text class="host" x="555" y="138" text-anchor="middle">files01</text></g>
+        <g class="node" id="an_hp"><circle class="ring decoy" cx="555" cy="195" r="18"/><text class="host" x="555" y="198" text-anchor="middle" fill="var(--gold)">hp01</text><text class="sub" x="555" y="224" text-anchor="middle">decoy</text></g>
+        <g class="node jewel" id="an_dc"><circle class="pulse" cx="825" cy="88" r="22"/><circle class="ring host" cx="825" cy="88" r="22" stroke="var(--gold)"/><text class="host" x="825" y="85" text-anchor="middle" fill="var(--gold)">dc01</text><text class="sub" x="825" y="97" text-anchor="middle" fill="#caa23a">jewel</text></g>
+        <g class="node jewel" id="an_vault"><circle class="ring host" cx="825" cy="168" r="22" stroke="var(--gold)"/><path class="shield" d="M848 150 l11 3 v7 c0 6 -6 8 -11 10 c-5 -2 -11 -4 -11 -10 v-7 z" fill="var(--blue)" stroke="#0e1620"/><text class="host" x="825" y="165" text-anchor="middle" fill="var(--gold)">vault01</text><text class="sub" x="825" y="177" text-anchor="middle" fill="#caa23a">jewel</text></g>
+        <g class="node"><circle class="ring blue" cx="945" cy="120" r="24"/><text class="cell" x="945" y="116" text-anchor="middle" fill="var(--blue)">BLUE</text><text class="sub" x="945" y="130" text-anchor="middle">CELL</text></g>
       </svg>
       <div class="amaplegend" aria-hidden="true">
         <span><i class="r"></i>red action</span>
@@ -597,7 +649,7 @@
         <span><i class="j"></i>crown jewel</span>
         <span><i class="d"></i>decoy / honeypot</span>
       </div>
-      <div class="stream" id="astream" aria-hidden="true"></div>
+      <div class="stream pbp" id="astream" aria-hidden="true"></div>
     </div>
 
     <!-- gate outcomes, not keystrokes -->
@@ -905,30 +957,42 @@
   var aw = document.getElementById('amapwrap');
   if(aw){
     var astream = document.getElementById('astream');
+    var elRed=document.getElementById('ored'), elBlue=document.getElementById('oblue'),
+        elClk=document.getElementById('oclock'), elJw=document.getElementById('ojewels'),
+        elMom=document.getElementById('omom'), elState=document.getElementById('ostate');
     var seq = [
-      {t:'t02', flow:'af1', node:'an1', hot:1, html:'<span class="r">RED</span> gains a foothold on web01'},
-      {t:'t05', flow:'df2', html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
-      {t:'t08', flow:'af4', html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>, path dead-ends'},
-      {t:'t11', flow:'af2', node:'an2', hot:1, html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
-      {t:'t16', flow:'df1', html:'<span class="b">BLUE</span> isolates app01 &mdash; <span class="cut">lateral path cut, +def</span>'},
-      {t:'t22', flow:'af3', node:'an3', hot:1, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
-      {t:'t28', node:'an3', fell:1, html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">crown jewel falls</span>'}
+      {t:'t02', flow:'f_rw', node:'an_web', st:'hot', red:0, blue:0, html:'<span class="r">RED</span> foothold on web01'},
+      {t:'t04', flow:'f_rv', node:'an_vpn', st:'hot', red:0, blue:0, html:'<span class="r">RED</span> second entry via vpn01'},
+      {t:'t06', flow:'f_bw', red:0, blue:60, html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
+      {t:'t09', flow:'f_wa', node:'an_app', st:'hot', red:20, blue:60, html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
+      {t:'t12', flow:'f_bh', node:'an_hp', st:'decoy', red:20, blue:125, html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>'},
+      {t:'t15', flow:'f_wf', node:'an_files', st:'hot', red:40, blue:125, html:'<span class="r">RED</span> branches web01 &rarr; files01'},
+      {t:'t18', flow:'f_bf', node:'an_files', st:'iso', red:40, blue:230, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">lateral path cut, +def</span>'},
+      {t:'t22', flow:'f_ad', node:'an_dc', st:'hot', red:60, blue:260, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
+      {t:'t28', node:'an_dc', st:'fell', red:360, blue:290, jewels:'RED 1 / 2', jw:['oj-dc','cap'], html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">dc01 crown jewel falls</span>'},
+      {t:'t33', flow:'f_bv', node:'an_vault', st:'def', red:390, blue:395, jw:['oj-vault','def'], win:'&#9679; BLUE WIN &middot; +5', html:'<span class="b">BLUE</span> holds vault01 &mdash; <span class="cut">defended, SLA kept</span>'}
     ];
     var aio = new IntersectionObserver(function(es){es.forEach(function(x){
       if(!x.isIntersecting) return; aio.unobserve(x.target);
       seq.forEach(function(s,ix){ setTimeout(function(){
         if(s.flow){ var f=document.getElementById(s.flow); if(f) f.classList.add('on'); }
-        if(s.node){ var n=document.getElementById(s.node); if(n){
-          if(s.fell){ n.classList.remove('hot'); n.classList.add('fell'); var p=n.querySelector('.pulse'); if(p) p.classList.remove('on'); }
-          else { n.classList.add('hot'); var pu=n.querySelector('.pulse'); if(pu) pu.classList.add('on'); }
+        if(s.node){ var n=document.getElementById(s.node); if(n){ var pl=n.querySelector('.pulse');
+          if(s.st==='hot'){ n.classList.add('hot'); if(pl) pl.classList.add('on'); }
+          else { n.classList.remove('hot'); if(pl) pl.classList.remove('on'); n.classList.add(s.st); }
         }}
+        if(elRed) elRed.textContent=s.red; if(elBlue) elBlue.textContent=s.blue;
+        if(elClk) elClk.textContent=s.t+' / 40';
+        if(elMom){ var tot=s.red+s.blue; elMom.style.width=(tot?Math.round(100*s.red/tot):50)+'%'; }
+        if(s.jewels && elJw) elJw.textContent=s.jewels;
+        if(s.jw){ var j=document.getElementById(s.jw[0]); if(j) j.classList.add(s.jw[1]); }
+        if(s.win && elState){ elState.innerHTML=s.win; elState.style.color='var(--blue)'; }
         if(astream){ var d=document.createElement('div'); d.className='row';
           d.innerHTML='<span class="tk">'+s.t+'</span><span>'+s.html+'</span>';
           astream.appendChild(d);
-          while(astream.children.length>4) astream.removeChild(astream.firstChild);
+          while(astream.children.length>6) astream.removeChild(astream.firstChild);
         }
-      }, reduce?0:(ix*1100)); });
-    });},{threshold:.25});
+      }, reduce?0:(ix*1000)); });
+    });},{threshold:.2});
     aio.observe(aw);
   }
 
