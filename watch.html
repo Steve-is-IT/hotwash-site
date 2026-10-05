@@ -92,7 +92,11 @@
   :root[data-theme="light"] .tbtn.primary{color:#ffffff}
   .tbtn.primary:hover{box-shadow:0 0 18px -6px var(--blue)}
   .tbtn.speed{min-width:54px;justify-content:center;min-height:38px;padding:7px 12px}
-  .tbtn.speed[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 22%,var(--elev));border-color:var(--blue);color:var(--blue);font-weight:600}
+  .tbtn.speed[aria-pressed="true"],.tbtn.scn[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 22%,var(--elev));border-color:var(--blue);color:var(--blue);font-weight:600}
+  .scnpick{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+  .scnpick .glbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-right:2px}
+  .scnpick .scntag{font-family:var(--mono);font-size:11px;color:var(--mut);margin-left:4px}
+  @media(max-width:620px){.scnpick .scntag{flex-basis:100%;margin:2px 0 0}}
   .tspacer{flex:1 1 auto;min-width:0}
   .tprog{display:flex;align-items:center;gap:10px;min-width:180px;flex:1 1 200px}
   .tprog .bar{flex:1 1 auto;height:8px;background:var(--elev);border:1px solid var(--line);border-radius:99px;overflow:hidden}
@@ -133,8 +137,15 @@
   <section class="watch-stage" aria-labelledby="board-h"><div class="wrap">
     <h2 class="sec-k" id="board-h" style="margin-bottom:12px">// live arena &middot; observer board</h2>
     <div class="watch-stageinner">
+      <div class="scnpick" role="group" aria-label="Choose a scenario">
+        <span class="glbl" aria-hidden="true">scenario</span>
+        <button class="tbtn scn" data-scn="zero-hour" type="button" aria-pressed="true">Zero Hour</button>
+        <button class="tbtn scn" data-scn="crossfire" type="button" aria-pressed="false">Crossfire</button>
+        <button class="tbtn scn" data-scn="safe-harbor" type="button" aria-pressed="false">Safe Harbor</button>
+        <span class="scntag" id="scntag">enterprise AD breach &middot; razor-thin finish</span>
+      </div>
       <div class="amapwrap" id="amapwrap">
-        <div class="amaptop"><span>LIVE ARENA &middot; observer board</span><span class="roomtip">&#9679; built for the room &middot; project it</span></div>
+        <div class="amaptop"><span id="amaptitle">LIVE ARENA &middot; Zero Hour</span><span class="roomtip">&#9679; built for the room &middot; project it</span></div>
 
         <!-- scoreline: live team points -->
         <div class="obvscore" aria-hidden="true">
@@ -281,28 +292,66 @@
   var FLOWS = ['f_rw','f_rv','f_wa','f_wf','f_wh','f_ad','f_bw','f_bf','f_bh','f_bv'];
   var JWCHIPS = ['oj-dc','oj-vault'];
 
-  /* scripted sequence: draft -> foothold -> branch -> detect -> decoy ->
-     isolate -> capture -> defend, ending in a razor-thin blue win on points. */
-  var BEATS = [
-    {t:'t00', red:0,   blue:0,   html:'<span class="j">DRAFT</span> &mdash; <span class="r">RED</span> &amp; <span class="b">BLUE</span> lock seeded loadouts'},
-    {t:'t02', flow:'f_rw', node:'an_web',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> foothold on web01'},
-    {t:'t04', flow:'f_rv', node:'an_vpn',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> second entry via vpn01'},
-    {t:'t06', flow:'f_bw',                  red:0,   blue:60,  html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
-    {t:'t09', flow:'f_wa', node:'an_app',   st:'hot',   red:20,  blue:60,  html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
-    {t:'t12', flow:'f_bh', node:'an_hp',    st:'decoy', red:20,  blue:125, html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>'},
-    {t:'t15', flow:'f_wf', node:'an_files', st:'hot',   red:40,  blue:125, html:'<span class="r">RED</span> branches web01 &rarr; files01'},
-    {t:'t18', flow:'f_bf', node:'an_files', st:'iso',   red:40,  blue:230, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">lateral path cut, +def</span>'},
-    {t:'t22', flow:'f_ad', node:'an_dc',    st:'hot',   red:60,  blue:260, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
-    {t:'t28',              node:'an_dc',    st:'fell',  red:360, blue:290, jewels:'RED 1 / 2', jw:['oj-dc','cap'], html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">dc01 crown jewel falls</span>'},
-    {t:'t33', flow:'f_bv', node:'an_vault', st:'def',   red:390, blue:395, jw:['oj-vault','def'], win:'&#9679; BLUE WIN &middot; +5', html:'<span class="b">BLUE</span> holds vault01 &mdash; <span class="cut">defended, SLA kept</span>'}
-  ];
-  var TOTAL = BEATS.length; // 11
+  /* three scripted matches, same seeded board, three outcomes. Each beat is
+     applied incrementally; the picker swaps the active table and replays. */
+  var SCENARIOS = {
+    'zero-hour': {
+      name:'Zero Hour', tag:'enterprise AD breach &middot; razor-thin finish',
+      beats:[
+        {t:'t00', red:0,   blue:0,   html:'<span class="j">DRAFT</span> &mdash; <span class="r">RED</span> &amp; <span class="b">BLUE</span> lock seeded loadouts'},
+        {t:'t02', flow:'f_rw', node:'an_web',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> foothold on web01'},
+        {t:'t04', flow:'f_rv', node:'an_vpn',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> second entry via vpn01'},
+        {t:'t06', flow:'f_bw',                  red:0,   blue:60,  html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
+        {t:'t09', flow:'f_wa', node:'an_app',   st:'hot',   red:20,  blue:60,  html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
+        {t:'t12', flow:'f_bh', node:'an_hp',    st:'decoy', red:20,  blue:125, html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>'},
+        {t:'t15', flow:'f_wf', node:'an_files', st:'hot',   red:40,  blue:125, html:'<span class="r">RED</span> branches web01 &rarr; files01'},
+        {t:'t18', flow:'f_bf', node:'an_files', st:'iso',   red:40,  blue:230, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">lateral path cut, +def</span>'},
+        {t:'t22', flow:'f_ad', node:'an_dc',    st:'hot',   red:60,  blue:260, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
+        {t:'t28',              node:'an_dc',    st:'fell',  red:360, blue:290, jewels:'RED 1 / 2', jw:['oj-dc','cap'], html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">dc01 crown jewel falls</span>'},
+        {t:'t33', flow:'f_bv', node:'an_vault', st:'def',   red:390, blue:395, jw:['oj-vault','def'], win:'&#9679; BLUE WIN &middot; +5', winside:'blue', html:'<span class="b">BLUE</span> holds vault01 &mdash; <span class="cut">defended, SLA kept</span>'}
+      ]
+    },
+    'crossfire': {
+      name:'Crossfire', tag:'fast red blitz &middot; the DC falls',
+      beats:[
+        {t:'t00', red:0,   blue:0,   html:'<span class="j">DRAFT</span> &mdash; <span class="r">RED</span> fields a hands-on-keyboard operator'},
+        {t:'t02', flow:'f_rw', node:'an_web',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> foothold on web01'},
+        {t:'t03', flow:'f_rv', node:'an_vpn',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> second entry via vpn01'},
+        {t:'t06', flow:'f_wa', node:'an_app',   st:'hot',   red:40,  blue:0,   html:'<span class="r">RED</span> pivots web01 &rarr; app01 &mdash; <span class="cut">no alert yet</span>'},
+        {t:'t09', flow:'f_bw',                  red:60,  blue:55,  html:'<span class="b">BLUE</span> EDR finally alerts on web01'},
+        {t:'t13', flow:'f_wf', node:'an_files', st:'hot',   red:150, blue:55,  html:'<span class="r">RED</span> dumps credentials on files01'},
+        {t:'t17', flow:'f_ad', node:'an_dc',    st:'hot',   red:210, blue:95,  html:'<span class="r">RED</span> admin logon to dc01'},
+        {t:'t21',              node:'an_dc',    st:'fell',  red:390, blue:130, jewels:'RED 1 / 2', jw:['oj-dc','cap'], html:'<span class="r">RED</span> captures the seeded proof &mdash; <span class="j">dc01 crown jewel falls</span>'},
+        {t:'t27', flow:'f_bf', node:'an_files', st:'iso',   red:390, blue:250, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">contained, but late</span>'},
+        {t:'t33', flow:'f_bv', node:'an_vault', st:'def',   red:430, blue:340, jw:['oj-vault','def'], win:'&#9679; RED WIN &middot; +90', winside:'red', html:'<span class="b">BLUE</span> saves vault01 &mdash; but <span class="r">RED</span> keeps the DC and the match'}
+      ]
+    },
+    'safe-harbor': {
+      name:'Safe Harbor', tag:'early detection &middot; a clean hold',
+      beats:[
+        {t:'t00', red:0,   blue:0,   html:'<span class="j">DRAFT</span> &mdash; <span class="b">BLUE</span> pre-stages detections and a honeypot'},
+        {t:'t02', flow:'f_rw', node:'an_web',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> foothold on web01'},
+        {t:'t04', flow:'f_bw',                  red:0,   blue:90,  html:'<span class="b">BLUE</span> catches web01 early &mdash; <span class="cut">fast triage</span>'},
+        {t:'t07', flow:'f_rv', node:'an_vpn',   st:'hot',   red:20,  blue:90,  html:'<span class="r">RED</span> tries a second entry via vpn01'},
+        {t:'t10', flow:'f_wh', node:'an_hp',    st:'decoy', red:20,  blue:200, html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>'},
+        {t:'t13', flow:'f_wf', node:'an_files', st:'hot',   red:45,  blue:200, html:'<span class="r">RED</span> branches toward files01'},
+        {t:'t16', flow:'f_bf', node:'an_files', st:'iso',   red:45,  blue:310, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">lateral path cut, +def</span>'},
+        {t:'t20', flow:'f_wa', node:'an_app',   st:'hot',   red:75,  blue:310, html:'<span class="r">RED</span> retries through app01'},
+        {t:'t25', flow:'f_bh',                  red:75,  blue:410, html:'<span class="b">BLUE</span> burns the red infra off the honeypot'},
+        {t:'t30',                               red:110, blue:450, jw:['oj-dc','def'], html:'<span class="b">BLUE</span> secures dc01 &mdash; <span class="cut">admin path held</span>'},
+        {t:'t34', flow:'f_bv', node:'an_vault', st:'def',   red:120, blue:470, jw:['oj-vault','def'], win:'&#9679; BLUE WIN &middot; both held', winside:'blue', html:'<span class="b">BLUE</span> holds vault01 &mdash; <span class="cut">both jewels defended</span>'}
+      ]
+    }
+  };
+  var active = 'zero-hour';
+  var BEATS = SCENARIOS[active].beats;
+  var TOTAL = BEATS.length;
 
   var cur = -1;          // index of the last applied beat (-1 = nothing shown)
   var playing = false;
   var speed = 1;
   var timer = null;
-  var BASE = 1400;       // ms per beat at 1x
+  var BASE = 2800;       // ms per beat at 1x — slow enough to read each discrete beat
   function interval(){ return Math.round(BASE / speed); }
   function endHold(){ return Math.max(1600, interval() * 2); } // pause on the final beat before the loop restarts
 
@@ -323,7 +372,7 @@
     if(elMom){ var tot = s.red + s.blue; elMom.style.width = (tot ? Math.round(100 * s.red / tot) : 50) + '%'; }
     if(s.jewels && elJw) elJw.textContent = s.jewels;
     if(s.jw){ var j = byId(s.jw[0]); if(j) j.classList.add(s.jw[1]); }
-    if(s.win && elState){ elState.innerHTML = s.win; elState.style.color = 'var(--blue)'; }
+    if(s.win && elState){ elState.innerHTML = s.win; elState.style.color = (s.winside === 'red') ? 'var(--red)' : 'var(--blue)'; }
     if(astream){
       var row = document.createElement('div'); row.className = 'row';
       var tk = document.createElement('span'); tk.className = 'tk'; tk.textContent = s.t;
@@ -359,7 +408,7 @@
     var human = cur < 0 ? 1 : cur + 1;
     if(progFill) progFill.style.width = Math.round(100 * human / TOTAL) + '%';
     if(progLbl) progLbl.textContent = 'beat ' + human + ' / ' + TOTAL;
-    if(progBar){ progBar.setAttribute('aria-valuenow', human); progBar.setAttribute('aria-valuetext', 'beat ' + human + ' of ' + TOTAL); }
+    if(progBar){ progBar.setAttribute('aria-valuemax', TOTAL); progBar.setAttribute('aria-valuenow', human); progBar.setAttribute('aria-valuetext', 'beat ' + human + ' of ' + TOTAL); }
   }
 
   var btnPlay = byId('btnPlay');
@@ -413,6 +462,25 @@
   var btnRestart = byId('btnRestart');
   if(btnRestart) btnRestart.addEventListener('click', restart);
   speedBtns.forEach(function(b){ b.addEventListener('click', function(){ setSpeed(+b.getAttribute('data-speed')); }); });
+
+  /* scenario picker: swap the active table and replay from beat 1 */
+  var scnBtns = Array.prototype.slice.call(document.querySelectorAll('.tbtn.scn'));
+  var scnTag = byId('scntag'), amapTitle = byId('amaptitle');
+  function setScenario(key){
+    if(!SCENARIOS[key] || key === active) return;
+    active = key;
+    BEATS = SCENARIOS[key].beats;
+    TOTAL = BEATS.length;
+    scnBtns.forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-scn') === key ? 'true' : 'false'); });
+    if(scnTag) scnTag.innerHTML = SCENARIOS[key].tag;
+    if(amapTitle) amapTitle.innerHTML = 'LIVE ARENA &middot; ' + SCENARIOS[key].name;
+    clearTimeout(timer);
+    reset();
+    updateProgress();
+    playing = false;
+    play(); // play the chosen scenario from beat 1
+  }
+  scnBtns.forEach(function(b){ b.addEventListener('click', function(){ setScenario(b.getAttribute('data-scn')); }); });
 
   /* start: auto-play and loop so the page is always showing a live match.
      Under prefers-reduced-motion the decorative arc/pulse/bar animations are
