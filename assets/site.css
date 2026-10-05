@@ -54,6 +54,8 @@ h1,h2,h3{font-family:var(--disp);letter-spacing:-.025em;text-wrap:balance}
 a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
 .btn.primary:focus-visible,.cta:focus-visible,.menubtn:focus-visible{outline-color:var(--ink)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+/* keep anchored sections clear of the sticky header */
+html{scroll-padding-top:84px}
 /* header */
 header{position:sticky;top:0;z-index:30;border-bottom:1px solid var(--line);
   background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(10px)}
