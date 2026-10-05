@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('hotwash-theme');document.documentElement.dataset.theme=(t==='light'||t==='dark')?t:'dark';}catch(e){document.documentElement.dataset.theme='dark';}</script>
+<title>Watch a live match — hotwa.sh</title>
+<meta name="description" content="Watch a full red-vs-blue Hotwash arena match play out like a broadcast: real tools, server-side scoring, and the mediation plane observers watch live. Play, pause, restart and change speed.">
+<link rel="canonical" href="https://hotwa.sh/watch.html">
+<meta name="theme-color" content="#0a1a2f">
+<meta property="og:title" content="Watch a live match — hotwa.sh">
+<meta property="og:description" content="A full red-vs-blue arena match, broadcast live on the observer board. Play, pause, restart, change speed — it loops forever.">
+<meta property="og:url" content="https://hotwa.sh/watch.html">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  /* ---- watch.html page head ---- */
+  .watch-head{padding:60px 0 6px}
+  h1.big{font-size:clamp(34px,6vw,62px);font-weight:900;line-height:1.0;margin:16px 0 0}
+  .watch-head .lede{max-width:60ch}
+  .watch-stage{padding:26px 0 8px;border-top:0}
+
+  /* ---- observer board (copied verbatim from index's inline arena styles) ---- */
+  .amapwrap{margin-top:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 14px}
+  .amaptop{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--mut);margin-bottom:6px}
+  .amaptop .roomtip{color:var(--faint)}
+  .amap{width:100%;display:block;color:var(--mut)}
+  .amap .lane{fill:#0e1620;stroke:var(--line)}
+  .amap .lane.jewel{stroke:#caa23a}
+  .amap .zlbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;fill:var(--faint)}
+  .amap .cell{font-family:var(--disp);font-weight:900;font-size:12px}
+  .amap .host{font-family:var(--mono);font-size:10px;fill:var(--mut)}
+  .amap .sub{font-family:var(--mono);font-size:8.5px;fill:var(--faint)}
+  .amap .ring{fill:#0e1620}
+  .amap .ring.red{stroke:var(--red-dim)} .amap .ring.blue{stroke:var(--blue-dim)} .amap .ring.host{stroke:var(--line-2)} .amap .ring.decoy{stroke:#caa23a;stroke-dasharray:3 3}
+  .amap .flow{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:0;stroke-dasharray:7 6;stroke-dashoffset:300}
+  .amap .flow.atk{stroke:var(--red)} .amap .flow.def{stroke:var(--blue)}
+  .amap .flow.on{opacity:.95;animation:aflow 1.2s linear forwards}
+  @keyframes aflow{to{stroke-dashoffset:0}}
+  .amap .node{transition:.35s}
+  .amap .node.hot .ring{stroke:var(--red);fill:#241216} .amap .node.hot .host{fill:var(--red)}
+  .amap .node.fell .ring{stroke:var(--red);fill:#2a0f12;stroke-width:2.5} .amap .node.fell .host{fill:var(--red)}
+  .amap .pulse{fill:var(--red);opacity:0}
+  .amap .pulse.on{animation:apulse 1.3s ease-out infinite}
+  @keyframes apulse{0%{opacity:.5;r:20}100%{opacity:0;r:34}}
+  @media(prefers-reduced-motion:reduce){.amap .flow{opacity:.9;stroke-dashoffset:0;animation:none}.amap .pulse.on{animation:none;opacity:0}}
+  .amaplegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--mut)}
+  .amaplegend i{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:0;margin-right:5px}
+  .amaplegend i.r{background:var(--red)} .amaplegend i.b{background:var(--blue)} .amaplegend i.j{background:#caa23a} .amaplegend i.d{background:transparent;border:1px dashed #caa23a}
+  /* observer board: scoreline + crown-jewel status + extra node states */
+  .obvscore{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;margin:6px 0 14px}
+  .obvscore .team{padding:8px 14px;border-radius:12px;background:#0e1620;border:1px solid var(--line)}
+  .obvscore .team.red{border-bottom:3px solid var(--red)} .obvscore .team.blue{border-bottom:3px solid var(--blue);text-align:right}
+  .obvscore .tname{font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+  .obvscore .team.red .tname{color:var(--red)} .obvscore .team.blue .tname{color:var(--blue)}
+  .obvscore .pts{font-family:var(--disp);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1;font-variant-numeric:tabular-nums}
+  .obvscore .team.red .pts{color:var(--red)} .obvscore .team.blue .pts{color:var(--blue)}
+  .obvscore .axes{font-family:var(--mono);font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-top:4px}
+  .obvscore .clock{text-align:center;min-width:132px}
+  .obvscore .clock .t{font-family:var(--disp);font-weight:800;font-size:18px;font-variant-numeric:tabular-nums}
+  .obvscore .statepill{font-family:var(--mono);font-size:10px;color:#3ac07e;display:inline-block;margin-top:3px}
+  .obvscore .mom{height:8px;border-radius:99px;background:var(--blue);overflow:hidden;margin-top:8px}
+  .obvscore .mom i{display:block;height:100%;background:var(--red);transition:width .7s ease}
+  .oobj{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;font-family:var(--mono);font-size:11px}
+  .oobj .k{color:var(--faint);letter-spacing:.12em} .oobj .cnt{color:var(--red);font-weight:700}
+  .oobj .jw{border:1px solid var(--line);border-left:3px solid #caa23a;border-radius:6px;padding:3px 10px;color:var(--mut);transition:.4s}
+  .oobj .jw.cap{border-left-color:var(--red);color:var(--red);background:#1a0f12}
+  .oobj .jw.def{border-left-color:var(--blue);color:var(--blue);background:#0f1b2e}
+  .amap .node.def .ring{stroke:var(--blue);fill:#10233f} .amap .node.def .host{fill:var(--blue)}
+  .amap .node.decoy .ring{stroke:var(--blue);stroke-dasharray:3 3} .amap .node.decoy .host{fill:var(--blue)}
+  .amap .node.iso{opacity:.55} .amap .node.iso .ring{stroke:var(--blue);stroke-dasharray:3 3} .amap .node.iso .host{fill:var(--blue)}
+  .amap .shield{opacity:0;transition:.4s} .amap .node.def .shield{opacity:1}
+  .pbp{margin-top:12px;font-family:var(--mono);font-size:11.5px;color:var(--mut);min-height:116px}
+  @media(max-width:620px){.obvscore{grid-template-columns:1fr;gap:8px}.obvscore .team.blue{text-align:left}.obvscore .clock{order:-1}}
+  /* streaming timeline */
+  .stream{margin-top:12px;border-top:1px dashed var(--line);padding-top:10px;font-family:var(--mono);font-size:11.5px;display:grid;gap:5px}
+  .stream .row{display:flex;gap:9px;align-items:baseline}
+  .stream .row .tk{color:var(--faint);min-width:30px}
+  .stream .row .r{color:var(--red)} .stream .row .b{color:var(--blue)} .stream .row .cut{color:var(--ok)} .stream .row .j{color:var(--gold)}
+
+  /* ---- transport controls ---- */
+  .transport{margin-top:16px;display:flex;flex-wrap:wrap;gap:14px 16px;align-items:center}
+  .tgroup{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .tgroup .glbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-right:2px}
+  .tbtn{font-family:var(--mono);font-size:13px;border:1px solid var(--line-2);border-radius:8px;padding:9px 15px;color:var(--ink);
+    background:var(--elev);cursor:pointer;transition:.15s;min-height:42px;display:inline-flex;align-items:center;gap:7px}
+  .tbtn:hover{border-color:var(--blue);color:var(--blue)}
+  .tbtn.primary{background:var(--blue);border-color:var(--blue);color:#06121f;font-weight:600}
+  :root[data-theme="light"] .tbtn.primary{color:#ffffff}
+  .tbtn.primary:hover{box-shadow:0 0 18px -6px var(--blue)}
+  .tbtn.speed{min-width:54px;justify-content:center;min-height:38px;padding:7px 12px}
+  .tbtn.speed[aria-pressed="true"]{background:color-mix(in srgb,var(--blue) 22%,var(--elev));border-color:var(--blue);color:var(--blue);font-weight:600}
+  .tspacer{flex:1 1 auto;min-width:0}
+  .tprog{display:flex;align-items:center;gap:10px;min-width:180px;flex:1 1 200px}
+  .tprog .bar{flex:1 1 auto;height:8px;background:var(--elev);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .tprog .bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .45s ease}
+  .tprog .plbl{font-family:var(--mono);font-size:11px;color:var(--mut);white-space:nowrap;min-width:72px;text-align:right}
+  @media(prefers-reduced-motion:reduce){.tprog .bar i{transition:none}.obvscore .mom i{transition:none}}
+  @media(max-width:620px){.transport{gap:12px}.tprog{flex-basis:100%;order:3}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="bar">
+  <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+  <span class="badge">v0.1 · free core</span>
+  <span class="spacer"></span>
+  <nav class="links" id="primary-nav" aria-label="Primary">
+    <a href="/#modes">Modes</a><a href="/#arena">Live arena</a><a href="/#scenarios">Scenarios</a><a href="/#scale">Cohorts</a><a href="/#tiers">Deploy</a><a href="/#faq">FAQ</a><a href="/pricing.html">Pricing</a><a href="/get-started.html">Get started</a>
+  </nav>
+  <button class="themetoggle" id="themetoggle" type="button" aria-pressed="false" aria-label="Switch to light theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="cta" href="/watch.html" aria-current="page">Watch a match</a>
+  <button class="navtoggle" id="navtoggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
+    <span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span>
+  </button>
+</div></header>
+
+<main id="main">
+  <!-- PAGE HEAD -->
+  <section class="watch-head" style="border-top:0" aria-labelledby="watch-h"><div class="wrap">
+    <p class="eyebrow"><span class="bk">//</span> watch a live match</p>
+    <h1 class="big" id="watch-h">Watch a match <span class="r">unfold</span>.</h1>
+    <p class="lede">A full red-vs-blue arena match, broadcast on the observer board. Players use real tools on real infrastructure; Hotwash scores what they actually achieve, server-side. You&rsquo;re watching the mediation plane &mdash; every point a fact it can see.</p>
+  </div></section>
+
+  <!-- THE BOARD + TRANSPORT -->
+  <section class="watch-stage" aria-labelledby="board-h"><div class="wrap">
+    <h2 class="sec-k" id="board-h" style="margin-bottom:12px">// live arena &middot; observer board</h2>
+    <div class="watch-stageinner">
+      <div class="amapwrap" id="amapwrap">
+        <div class="amaptop"><span>LIVE ARENA &middot; observer board</span><span class="roomtip">&#9679; built for the room &middot; project it</span></div>
+
+        <!-- scoreline: live team points -->
+        <div class="obvscore" aria-hidden="true">
+          <div class="team red"><div class="tname">&#9876; RED CELL</div><div class="pts" id="ored">0</div><div class="axes">access &middot; persistence &middot; stealth</div></div>
+          <div class="clock"><div class="t" id="oclock">t00 / 40</div><div class="statepill" id="ostate">&#9679; LIVE</div><div class="mom"><i id="omom" style="width:50%"></i></div></div>
+          <div class="team blue"><div class="tname">&#128737; BLUE CELL</div><div class="pts" id="oblue">0</div><div class="axes">detect &middot; contain &middot; recover</div></div>
+        </div>
+
+        <!-- crown-jewel status -->
+        <div class="oobj" aria-hidden="true">
+          <span class="k">CROWN JEWELS</span><span class="cnt" id="ojewels">RED 0 / 2</span>
+          <span class="jw" id="oj-dc">dc01</span><span class="jw" id="oj-vault">vault01</span>
+        </div>
+
+        <svg class="amap" viewBox="0 0 1000 250" role="img" aria-label="Live arena observer board. The RED cell breaks in through two DMZ hosts (web01, vpn01) and branches across the internal zone (app01, files01) toward the admin crown jewels; it captures dc01. The BLUE cell detects on web01, trips a decoy on hp01, isolates files01 to cut a lateral path, and defends the secrets vault vault01.">
+          <text class="zlbl" x="305" y="22" text-anchor="middle">DMZ</text>
+          <text class="zlbl" x="555" y="22" text-anchor="middle">INTERNAL</text>
+          <text class="zlbl" x="825" y="22" text-anchor="middle">ADMIN &middot; CROWN JEWELS</text>
+          <rect class="lane" x="230" y="34" width="150" height="182" rx="11"/>
+          <rect class="lane" x="470" y="34" width="170" height="182" rx="11"/>
+          <rect class="lane jewel" x="740" y="34" width="170" height="182" rx="11"/>
+          <g stroke-linecap="round">
+            <line class="edge" style="stroke:var(--line)" x1="70" y1="120" x2="305" y2="88"/>
+            <line class="edge" style="stroke:var(--line)" x1="70" y1="120" x2="305" y2="168"/>
+            <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="70"/>
+            <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="135"/>
+            <line class="edge" style="stroke:var(--line)" x1="305" y1="88" x2="555" y2="195"/>
+            <line class="edge" style="stroke:var(--line)" x1="555" y1="70" x2="825" y2="88"/>
+            <line class="edge" style="stroke:var(--line)" x1="555" y1="135" x2="825" y2="168"/>
+          </g>
+          <path class="flow atk" id="f_rw" d="M94 120 C 180 120 210 88 283 88"/>
+          <path class="flow atk" id="f_rv" d="M94 120 C 190 120 215 168 283 168"/>
+          <path class="flow atk" id="f_wa" d="M327 88 C 420 80 470 70 533 70"/>
+          <path class="flow atk" id="f_wf" d="M327 92 C 430 104 470 135 533 135"/>
+          <path class="flow atk" id="f_wh" d="M327 96 C 430 160 470 195 533 195"/>
+          <path class="flow atk" id="f_ad" d="M577 70 C 680 74 740 88 803 88"/>
+          <path class="flow def" id="f_bw" d="M921 120 C 700 158 470 150 329 92"/>
+          <path class="flow def" id="f_bf" d="M921 120 C 800 135 660 135 577 135"/>
+          <path class="flow def" id="f_bh" d="M921 120 C 800 178 660 195 577 195"/>
+          <path class="flow def" id="f_bv" d="M921 120 C 885 140 855 168 803 168"/>
+          <g class="node"><circle class="ring red" cx="70" cy="120" r="26"/><text class="cell" x="70" y="116" text-anchor="middle" fill="var(--red)">RED</text><text class="sub" x="70" y="130" text-anchor="middle">CELL</text></g>
+          <g class="node" id="an_web"><circle class="pulse" cx="305" cy="88" r="20"/><circle class="ring host" cx="305" cy="88" r="20"/><text class="host" x="305" y="91" text-anchor="middle">web01</text></g>
+          <g class="node" id="an_vpn"><circle class="pulse" cx="305" cy="168" r="20"/><circle class="ring host" cx="305" cy="168" r="20"/><text class="host" x="305" y="171" text-anchor="middle">vpn01</text></g>
+          <g class="node" id="an_app"><circle class="pulse" cx="555" cy="70" r="20"/><circle class="ring host" cx="555" cy="70" r="20"/><text class="host" x="555" y="73" text-anchor="middle">app01</text></g>
+          <g class="node" id="an_files"><circle class="pulse" cx="555" cy="135" r="20"/><circle class="ring host" cx="555" cy="135" r="20"/><text class="host" x="555" y="138" text-anchor="middle">files01</text></g>
+          <g class="node" id="an_hp"><circle class="ring decoy" cx="555" cy="195" r="18"/><text class="host" x="555" y="198" text-anchor="middle" fill="var(--gold)">hp01</text><text class="sub" x="555" y="224" text-anchor="middle">decoy</text></g>
+          <g class="node jewel" id="an_dc"><circle class="pulse" cx="825" cy="88" r="22"/><circle class="ring host" cx="825" cy="88" r="22" stroke="var(--gold)"/><text class="host" x="825" y="85" text-anchor="middle" fill="var(--gold)">dc01</text><text class="sub" x="825" y="97" text-anchor="middle" fill="#caa23a">jewel</text></g>
+          <g class="node jewel" id="an_vault"><circle class="ring host" cx="825" cy="168" r="22" stroke="var(--gold)"/><path class="shield" d="M848 150 l11 3 v7 c0 6 -6 8 -11 10 c-5 -2 -11 -4 -11 -10 v-7 z" fill="var(--blue)" stroke="#0e1620"/><text class="host" x="825" y="165" text-anchor="middle" fill="var(--gold)">vault01</text><text class="sub" x="825" y="177" text-anchor="middle" fill="#caa23a">jewel</text></g>
+          <g class="node"><circle class="ring blue" cx="945" cy="120" r="24"/><text class="cell" x="945" y="116" text-anchor="middle" fill="var(--blue)">BLUE</text><text class="sub" x="945" y="130" text-anchor="middle">CELL</text></g>
+        </svg>
+        <div class="amaplegend" aria-hidden="true">
+          <span><i class="r"></i>red action</span>
+          <span><i class="b"></i>blue action</span>
+          <span><i class="j"></i>crown jewel</span>
+          <span><i class="d"></i>decoy / honeypot</span>
+        </div>
+        <div class="stream pbp" id="astream" aria-hidden="true"></div>
+      </div>
+
+      <!-- transport controls -->
+      <div class="transport" role="group" aria-label="Match playback controls">
+        <button class="tbtn primary" id="btnPlay" type="button" aria-pressed="false" aria-label="Play the match">Play</button>
+        <button class="tbtn" id="btnRestart" type="button" aria-label="Restart the match from beat 1">Restart</button>
+        <div class="tgroup" role="group" aria-label="Playback speed">
+          <span class="glbl" aria-hidden="true">speed</span>
+          <button class="tbtn speed" data-speed="1" type="button" aria-pressed="true" aria-label="Speed 1x">1&times;</button>
+          <button class="tbtn speed" data-speed="2" type="button" aria-pressed="false" aria-label="Speed 2x">2&times;</button>
+          <button class="tbtn speed" data-speed="4" type="button" aria-pressed="false" aria-label="Speed 4x">4&times;</button>
+        </div>
+        <div class="tprog">
+          <div class="bar" role="progressbar" id="tprogbar" aria-label="Match progress" aria-valuemin="1" aria-valuemax="11" aria-valuenow="1" aria-valuetext="beat 1 of 11"><i id="tprogfill"></i></div>
+          <span class="plbl" id="tproglbl">beat 1 / 11</span>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- CTA -->
+  <div class="wrap"><div class="ctaband">
+    <h2>Your range runs the same way.</h2>
+    <p class="sub">Seeded per team, graded server-side, offline by default. Spin up your own red, blue, or live red-vs-blue arena.</p>
+    <div class="btnrow">
+      <a class="btn primary" href="/get-started.html">Start your own range</a>
+      <a class="btn ghost" href="/pricing.html">See pricing</a>
+    </div>
+  </div></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+        <p class="foot-tag">The range that fights back. Red-team CTF, blue-team detection, and live red-vs-blue on one seeded, offline-first engine.</p>
+        <p class="foot-coll">Part of <a href="https://competencecollective.org">The Competence Collective</a>.</p>
+      </div>
+      <nav class="fcol" aria-label="Product">
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#arena">Live arena</a></li>
+          <li><a href="/#scenarios">Scenarios</a></li>
+          <li><a href="/#scale">Cohorts</a></li>
+          <li><a href="/#tiers">Deploy</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="Get it">
+        <h2>Get it</h2>
+        <ul>
+          <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/get-started.html">Get started</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Hotwash &middot; hotwa.sh</span>
+      <span class="wm">hotwa<span class="dot">.sh</span></span>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/app.js"></script>
+<script>
+/* watch.html — controllable observer-board player.
+   Refactor of index's fire-once IntersectionObserver into a transport:
+   a beat table, applyBeat(n), a reset(), a speed-driven timer, and a loop. */
+(function(){
+  var aw = document.getElementById('amapwrap');
+  if(!aw) return;
+
+  var byId = function(id){ return document.getElementById(id); };
+  var astream = byId('astream');
+  var elRed = byId('ored'), elBlue = byId('oblue'), elClk = byId('oclock'),
+      elJw = byId('ojewels'), elMom = byId('omom'), elState = byId('ostate');
+
+  var NODES = ['an_web','an_vpn','an_app','an_files','an_hp','an_dc','an_vault'];
+  var FLOWS = ['f_rw','f_rv','f_wa','f_wf','f_wh','f_ad','f_bw','f_bf','f_bh','f_bv'];
+  var JWCHIPS = ['oj-dc','oj-vault'];
+
+  /* scripted sequence: draft -> foothold -> branch -> detect -> decoy ->
+     isolate -> capture -> defend, ending in a razor-thin blue win on points. */
+  var BEATS = [
+    {t:'t00', red:0,   blue:0,   html:'<span class="j">DRAFT</span> &mdash; <span class="r">RED</span> &amp; <span class="b">BLUE</span> lock seeded loadouts'},
+    {t:'t02', flow:'f_rw', node:'an_web',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> foothold on web01'},
+    {t:'t04', flow:'f_rv', node:'an_vpn',   st:'hot',   red:0,   blue:0,   html:'<span class="r">RED</span> second entry via vpn01'},
+    {t:'t06', flow:'f_bw',                  red:0,   blue:60,  html:'<span class="b">BLUE</span> EDR alerts on web01 &mdash; <span class="cut">investigating</span>'},
+    {t:'t09', flow:'f_wa', node:'an_app',   st:'hot',   red:20,  blue:60,  html:'<span class="r">RED</span> pivots web01 &rarr; app01'},
+    {t:'t12', flow:'f_bh', node:'an_hp',    st:'decoy', red:20,  blue:125, html:'<span class="r">RED</span> probes hp01 &mdash; <span class="j">decoy tripped</span>'},
+    {t:'t15', flow:'f_wf', node:'an_files', st:'hot',   red:40,  blue:125, html:'<span class="r">RED</span> branches web01 &rarr; files01'},
+    {t:'t18', flow:'f_bf', node:'an_files', st:'iso',   red:40,  blue:230, html:'<span class="b">BLUE</span> isolates files01 &mdash; <span class="cut">lateral path cut, +def</span>'},
+    {t:'t22', flow:'f_ad', node:'an_dc',    st:'hot',   red:60,  blue:260, html:'<span class="r">RED</span> reaches dc01 &mdash; admin logon'},
+    {t:'t28',              node:'an_dc',    st:'fell',  red:360, blue:290, jewels:'RED 1 / 2', jw:['oj-dc','cap'], html:'<span class="r">RED</span> recovers the seeded proof &mdash; <span class="j">dc01 crown jewel falls</span>'},
+    {t:'t33', flow:'f_bv', node:'an_vault', st:'def',   red:390, blue:395, jw:['oj-vault','def'], win:'&#9679; BLUE WIN &middot; +5', html:'<span class="b">BLUE</span> holds vault01 &mdash; <span class="cut">defended, SLA kept</span>'}
+  ];
+  var TOTAL = BEATS.length; // 11
+
+  var cur = -1;          // index of the last applied beat (-1 = nothing shown)
+  var playing = false;
+  var speed = 1;
+  var timer = null;
+  var BASE = 1400;       // ms per beat at 1x
+  function interval(){ return Math.round(BASE / speed); }
+  function endHold(){ return Math.max(1600, interval() * 2); } // pause on the final beat before the loop restarts
+
+  /* apply ONE beat's changes incrementally (matches index's step logic) */
+  function applyBeat(s){
+    if(s.flow){ var f = byId(s.flow); if(f) f.classList.add('on'); }
+    if(s.node){
+      var n = byId(s.node);
+      if(n){
+        var pl = n.querySelector('.pulse');
+        if(s.st === 'hot'){ n.classList.add('hot'); if(pl) pl.classList.add('on'); }
+        else { n.classList.remove('hot'); if(pl) pl.classList.remove('on'); n.classList.add(s.st); }
+      }
+    }
+    if(elRed) elRed.textContent = s.red;
+    if(elBlue) elBlue.textContent = s.blue;
+    if(elClk) elClk.textContent = s.t + ' / 40';
+    if(elMom){ var tot = s.red + s.blue; elMom.style.width = (tot ? Math.round(100 * s.red / tot) : 50) + '%'; }
+    if(s.jewels && elJw) elJw.textContent = s.jewels;
+    if(s.jw){ var j = byId(s.jw[0]); if(j) j.classList.add(s.jw[1]); }
+    if(s.win && elState){ elState.innerHTML = s.win; elState.style.color = 'var(--blue)'; }
+    if(astream){
+      var row = document.createElement('div'); row.className = 'row';
+      var tk = document.createElement('span'); tk.className = 'tk'; tk.textContent = s.t;
+      var msg = document.createElement('span'); msg.innerHTML = s.html; // our own authored static strings
+      row.appendChild(tk); row.appendChild(msg);
+      astream.appendChild(row);
+      while(astream.children.length > 6) astream.removeChild(astream.firstChild);
+    }
+  }
+
+  function reset(){
+    cur = -1;
+    NODES.forEach(function(id){
+      var n = byId(id); if(!n) return;
+      n.classList.remove('hot','fell','def','decoy','iso');
+      var pl = n.querySelector('.pulse'); if(pl) pl.classList.remove('on');
+    });
+    FLOWS.forEach(function(id){ var f = byId(id); if(f) f.classList.remove('on'); });
+    JWCHIPS.forEach(function(id){ var j = byId(id); if(j) j.classList.remove('cap','def'); });
+    if(elRed) elRed.textContent = '0';
+    if(elBlue) elBlue.textContent = '0';
+    if(elClk) elClk.textContent = 't00 / 40';
+    if(elMom) elMom.style.width = '50%';
+    if(elJw) elJw.textContent = 'RED 0 / 2';
+    if(elState){ elState.innerHTML = '&#9679; LIVE'; elState.style.color = ''; }
+    if(astream) while(astream.firstChild) astream.removeChild(astream.firstChild);
+  }
+
+  function step(){ cur++; if(cur >= TOTAL) cur = TOTAL - 1; applyBeat(BEATS[cur]); }
+
+  var progBar = byId('tprogbar'), progFill = byId('tprogfill'), progLbl = byId('tproglbl');
+  function updateProgress(){
+    var human = cur < 0 ? 1 : cur + 1;
+    if(progFill) progFill.style.width = Math.round(100 * human / TOTAL) + '%';
+    if(progLbl) progLbl.textContent = 'beat ' + human + ' / ' + TOTAL;
+    if(progBar){ progBar.setAttribute('aria-valuenow', human); progBar.setAttribute('aria-valuetext', 'beat ' + human + ' of ' + TOTAL); }
+  }
+
+  var btnPlay = byId('btnPlay');
+  function setPlayUI(isPlaying){
+    if(!btnPlay) return;
+    btnPlay.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+    btnPlay.textContent = isPlaying ? 'Pause' : 'Play';
+    btnPlay.setAttribute('aria-label', isPlaying ? 'Pause the match' : 'Play the match');
+    btnPlay.classList.toggle('primary', !isPlaying);
+  }
+
+  /* drive the sequence forward and loop at the end */
+  function advance(){
+    if(!playing) return;
+    if(cur >= TOTAL - 1) reset(); // loop: wipe the board, then replay from beat 1
+    step();
+    updateProgress();
+    var atEnd = (cur >= TOTAL - 1);
+    timer = setTimeout(advance, atEnd ? endHold() : interval());
+  }
+
+  function play(){
+    if(playing) return;
+    playing = true; setPlayUI(true);
+    clearTimeout(timer);
+    advance(); // show the next beat immediately, then keep going
+  }
+  function pause(){
+    playing = false; setPlayUI(false);
+    clearTimeout(timer);
+  }
+  function restart(){
+    clearTimeout(timer);
+    reset();
+    step();            // show beat 1
+    updateProgress();
+    if(playing) timer = setTimeout(advance, interval());
+  }
+
+  var speedBtns = Array.prototype.slice.call(document.querySelectorAll('.tbtn.speed'));
+  function setSpeed(s){
+    speed = s;
+    speedBtns.forEach(function(b){ b.setAttribute('aria-pressed', (+b.getAttribute('data-speed') === s) ? 'true' : 'false'); });
+    if(playing){ clearTimeout(timer); timer = setTimeout(advance, interval()); }
+  }
+
+  /* wire controls */
+  if(btnPlay) btnPlay.addEventListener('click', function(){
+    if(playing) pause(); else play();
+  });
+  var btnRestart = byId('btnRestart');
+  if(btnRestart) btnRestart.addEventListener('click', restart);
+  speedBtns.forEach(function(b){ b.addEventListener('click', function(){ setSpeed(+b.getAttribute('data-speed')); }); });
+
+  /* start: auto-play and loop so the page is always showing a live match.
+     Under prefers-reduced-motion the decorative arc/pulse/bar animations are
+     disabled via CSS, so only the discrete scoreline/log/state updates remain —
+     and the match is always pausable. */
+  reset();
+  updateProgress();
+  play();
+})();
+</script>
+</body>
+</html>

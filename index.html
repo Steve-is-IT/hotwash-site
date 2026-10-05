@@ -420,7 +420,7 @@
     <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
     <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   </button>
-  <a class="cta" href="#arena">Watch a match</a>
+  <a class="cta" href="/watch.html">Watch a match</a>
   <button class="navtoggle" id="navtoggle" aria-label="Open navigation menu" aria-expanded="false" aria-controls="primary-nav">
     <span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span><span class="ln" aria-hidden="true"></span>
   </button>
@@ -435,7 +435,7 @@
       <p class="lede">Red-team CTF, blue-team detection CTF, and live red-vs-blue &mdash; on one seeded engine. Every team gets a different, uncopyable, self-verified instance. They go to war <strong>live</strong>: red works the kill chain while blue detects and counters in real time. Then Hotwash writes the debrief.</p>
       <div class="hero-cta">
         <a class="btn primary" href="#modes">Start a range</a>
-        <a class="btn ghost" href="#arena">See a live match</a>
+        <a class="btn ghost" href="/watch.html">See a live match</a>
       </div>
       <div class="trust">
         <span><b>Uncopyable</b> per-team flags</span><span><b>Verify</b> before release</span><span><b>Server-side</b> grading</span><span><b>Offline</b> &amp; air-gapped</span>
@@ -793,37 +793,6 @@
   </div></section>
 
   <!-- LOOP -->
-  <section id="loop" aria-labelledby="loop-h"><div class="wrap">
-    <p class="sec-k reveal">// the loop</p>
-    <h2 class="sec reveal" id="loop-h">Author once. Everyone fights a different fight.</h2>
-    <div class="loop">
-      <div class="step reveal"><p class="n">01 &middot; AUTHOR</p><h3>Write it once</h3><p>One scenario in the DSL &mdash; artifacts, flags, a solver, a live target.</p></div>
-      <div class="step reveal"><p class="n">02 &middot; SEED</p><h3>Per-team variant</h3><p>Each team&rsquo;s seed produces its own hosts, creds and flags.</p></div>
-      <div class="step reveal"><p class="n">03 &middot; VERIFY</p><h3>Fresh catch</h3><p>An independent solver proves every instance before release.</p></div>
-      <div class="step reveal"><p class="n">04 &middot; PLAY</p><h3>Attack &amp; defend</h3><p>Jeopardy, detection rules, or a live red/blue engagement.</p></div>
-      <div class="step reveal"><p class="n">05 &middot; HOTWASH</p><h3>Debrief</h3><p>An automatic after-action report with a prioritized fix plan.</p></div>
-    </div>
-  </div></section>
-
-  <!-- FEATURES -->
-  <section id="features" aria-labelledby="feat-h"><div class="wrap">
-    <p class="sec-k reveal">// arsenal</p>
-    <h2 class="sec reveal" id="feat-h">Built for the whole fight.</h2>
-    <div class="feat">
-      <div class="fc reveal"><p class="ic">[ red ]</p><h3>Live targets</h3><p>Seeded, sandboxed, loopback-only vulnerable apps. Real exploitation, isolated per team.</p></div>
-      <div class="fc reveal"><p class="ic">[ blue ]</p><h3>Detection engineering</h3><p>Write a Sigma, YARA or Suricata-style rule; it&rsquo;s graded on planted malicious + benign data. Pass with no false positives.</p></div>
-      <div class="fc reveal"><p class="ic">[ purple ]</p><h3>Dual-face incidents</h3><p>One seeded incident, two faces &mdash; red exploits it, blue detects it from the telemetry the exploit produced.</p></div>
-      <div class="fc reveal"><p class="ic">[ sys ]</p><h3>Offline &amp; air-gapped</h3><p>Runs with the cable unplugged. Signed offline content bundles, no pulls at play time.</p></div>
-      <div class="fc reveal"><p class="ic">[ ops ]</p><h3>Facilitator console</h3><p>A white-cell console to run a match: prep, begin, fire injects, watch, end &mdash; plus a one-command deploy.</p></div>
-      <div class="fc reveal"><p class="ic">[ edu ]</p><h3>Classroom / LTI 1.3</h3><p>Rostered teams, graded challenges, scores posted back to the gradebook.</p></div>
-    </div>
-    <div class="modes">
-      <span class="mode">Training <span class="mut">&mdash; offline, solo</span></span>
-      <span class="mode">Events <span class="mut">&mdash; teams, scoreboard, live targets</span></span>
-      <span class="mode">Classroom <span class="mut">&mdash; LTI, graded</span></span>
-    </div>
-  </div></section>
-
   <!-- TIERS -->
   <section id="tiers" aria-labelledby="tiers-h"><div class="wrap">
     <p class="sec-k reveal">// two ways to deploy</p>
@@ -872,19 +841,6 @@
     </div>
   </div></section>
 
-  <!-- AUDIENCE -->
-  <section id="who" aria-labelledby="who-h"><div class="wrap">
-    <p class="sec-k reveal">// who it&rsquo;s for</p>
-    <h2 class="sec reveal" id="who-h">One range, five fronts.</h2>
-    <div class="aud">
-      <div class="ac reveal"><h3 class="b">Blue teams &amp; SOCs</h3><p>Pressure-test detection and response against a live adversary, then get a fix plan you can action Monday.</p></div>
-      <div class="ac reveal"><h3 class="r">Red teams</h3><p>Hands-on-keyboard against seeded, isolated targets &mdash; recon to objective, no two runs the same.</p></div>
-      <div class="ac reveal"><h3>CTF organizers</h3><p>Uncopyable per-team flags, self-verifying challenges and a broadcast attack map. No 2am &ldquo;the flag&rsquo;s broken&rdquo; messages.</p></div>
-      <div class="ac reveal"><h3>Universities</h3><p>Rostered classes over LTI, per-student seeded variants, scores to the gradebook, offline-ready for the lab.</p></div>
-      <div class="ac reveal"><h3>MSSPs</h3><p>Repeatable seeded scenarios and facilitated AARs as deliverables &mdash; on the digital-twin tier.</p></div>
-    </div>
-  </div></section>
-
   <!-- FAQ -->
   <section id="faq" aria-labelledby="faq-h"><div class="wrap">
     <p class="sec-k reveal">// questions</p>
@@ -908,7 +864,7 @@
     <div class="run"><span class="p">&#10095;</span> ./hotwash arena serve <span style="color:var(--mut)">--scenario zero-hour --draft 100</span><span class="cursor"></span></div>
     <div class="btnrow">
       <a class="btn primary" href="#modes">Start a range</a>
-      <a class="btn ghost" href="#arena">Watch a match</a>
+      <a class="btn ghost" href="/watch.html">Watch a match</a>
     </div>
   </div></section>
 </main>
