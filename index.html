@@ -224,6 +224,15 @@
   .amap .cell{font-family:var(--disp);font-weight:900;font-size:12px}
   .amap .host{font-family:var(--mono);font-size:10px;fill:var(--mut)}
   .amap .sub{font-family:var(--mono);font-size:8.5px;fill:var(--faint)}
+  /* the wide map SVGs scale down hard on phones — enlarge their labels so they stay legible */
+  @media(max-width:600px){
+    .frontmap .lbl{font-size:15px}
+    .frontmap .hostname{font-size:17px}
+    .amap .zlbl{font-size:14px}
+    .amap .cell{font-size:18px}
+    .amap .host{font-size:17px}
+    .amap .sub{font-size:13px}
+  }
   .amap .ring{fill:#0e1620}
   .amap .ring.red{stroke:var(--red-dim)} .amap .ring.blue{stroke:var(--blue-dim)} .amap .ring.host{stroke:var(--line-2)} .amap .ring.decoy{stroke:#caa23a;stroke-dasharray:3 3}
   .amap .flow{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:0;stroke-dasharray:7 6;stroke-dashoffset:300}

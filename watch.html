@@ -34,6 +34,13 @@
   .amap .cell{font-family:var(--disp);font-weight:900;font-size:12px}
   .amap .host{font-family:var(--mono);font-size:10px;fill:var(--mut)}
   .amap .sub{font-family:var(--mono);font-size:8.5px;fill:var(--faint)}
+  /* enlarge the map labels on phones, where the wide SVG scales down hard */
+  @media(max-width:600px){
+    .amap .zlbl{font-size:14px}
+    .amap .cell{font-size:18px}
+    .amap .host{font-size:17px}
+    .amap .sub{font-size:13px}
+  }
   .amap .ring{fill:#0e1620}
   .amap .ring.red{stroke:var(--red-dim)} .amap .ring.blue{stroke:var(--blue-dim)} .amap .ring.host{stroke:var(--line-2)} .amap .ring.decoy{stroke:#caa23a;stroke-dasharray:3 3}
   .amap .flow{fill:none;stroke-width:2.4;stroke-linecap:round;opacity:0;stroke-dasharray:7 6;stroke-dashoffset:300}
