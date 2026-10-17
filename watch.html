@@ -109,6 +109,7 @@
   .tprog .bar{flex:1 1 auto;height:8px;background:var(--elev);border:1px solid var(--line);border-radius:99px;overflow:hidden}
   .tprog .bar i{display:block;height:100%;background:var(--blue);width:0;transition:width .45s ease}
   .tprog .plbl{font-family:var(--mono);font-size:11px;color:var(--mut);white-space:nowrap;min-width:72px;text-align:right}
+  .transport .keys{flex-basis:100%;font-family:var(--mono);font-size:11px;color:var(--faint);margin:0}
   @media(prefers-reduced-motion:reduce){.tprog .bar i{transition:none}.obvscore .mom i{transition:none}}
   @media(max-width:620px){.transport{gap:12px}.tprog{flex-basis:100%;order:3}}
 </style>
@@ -142,6 +143,7 @@
     </div>
     <div class="smgroup">
       <p class="smh">Learn</p>
+      <a href="/compare.html">Why Hotwash</a>
       <a href="/#faq">FAQ</a>
       <a href="mailto:hello@hotwa.sh">Contact</a>
     </div>
@@ -242,6 +244,7 @@
           <div class="bar" role="progressbar" id="tprogbar" aria-label="Match progress" aria-valuemin="1" aria-valuemax="11" aria-valuenow="1" aria-valuetext="beat 1 of 11"><i id="tprogfill"></i></div>
           <span class="plbl" id="tproglbl">beat 1 / 11</span>
         </div>
+        <p class="keys" aria-label="Keyboard shortcuts">Space play/pause &middot; R restart &middot; 1&ndash;3 scenario &middot; + / &minus; speed</p>
       </div>
     </div>
   </div></section>
@@ -285,6 +288,7 @@
       <nav class="fcol" aria-label="About">
         <h2>About</h2>
         <ul>
+          <li><a href="/compare.html">Why Hotwash</a></li>
           <li><a href="/#faq">FAQ</a></li>
           <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
         </ul>
@@ -492,6 +496,7 @@
   function setScenario(key){
     if(!SCENARIOS[key] || key === active) return;
     active = key;
+    try { history.replaceState(null, '', '?scenario=' + encodeURIComponent(key)); } catch (e) {}
     BEATS = SCENARIOS[key].beats;
     TOTAL = BEATS.length;
     scnBtns.forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-scn') === key ? 'true' : 'false'); });
@@ -504,6 +509,30 @@
     play(); // play the chosen scenario from beat 1
   }
   scnBtns.forEach(function(b){ b.addEventListener('click', function(){ setScenario(b.getAttribute('data-scn')); }); });
+
+  /* deep link: ?scenario=<key> opens that match directly (shareable); the picker keeps the URL in sync */
+  try {
+    var want = new URLSearchParams(location.search).get('scenario');
+    if (want && SCENARIOS[want] && want !== active) {
+      active = want; BEATS = SCENARIOS[want].beats; TOTAL = BEATS.length;
+      scnBtns.forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-scn') === want ? 'true' : 'false'); });
+      if (scnTag) scnTag.innerHTML = SCENARIOS[want].tag;
+      if (amapTitle) amapTitle.innerHTML = 'LIVE ARENA &middot; ' + SCENARIOS[want].name;
+    }
+  } catch (e) {}
+
+  /* keyboard: Space play/pause, R restart, 1-3 pick a scenario, + / - change speed */
+  var SPEEDS = [1, 2, 4];
+  document.addEventListener('keydown', function(e){
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target, tag = t && t.tagName;
+    if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA' || (t && t.isContentEditable)) return;
+    if (e.key === ' ' || e.code === 'Space') { if (tag === 'BUTTON' || tag === 'A') return; e.preventDefault(); if (playing) pause(); else play(); return; }
+    if (e.key === 'r' || e.key === 'R') { restart(); return; }
+    if (e.key >= '1' && e.key <= '3') { var b = scnBtns[+e.key - 1]; if (b) setScenario(b.getAttribute('data-scn')); return; }
+    if (e.key === '+' || e.key === '=') { var i = SPEEDS.indexOf(speed); if (i < SPEEDS.length - 1) setSpeed(SPEEDS[i + 1]); return; }
+    if (e.key === '-' || e.key === '_') { var j = SPEEDS.indexOf(speed); if (j > 0) setSpeed(SPEEDS[j - 1]); return; }
+  });
 
   /* start: auto-play and loop so the page is always showing a live match.
      Under prefers-reduced-motion the decorative arc/pulse/bar animations are
