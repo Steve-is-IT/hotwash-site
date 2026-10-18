@@ -66,6 +66,12 @@
   .btn.primary:hover{box-shadow:0 0 22px -6px var(--blue);transform:translateY(-1px)}
   .btn.ghost:hover{border-color:var(--ink);transform:translateY(-1px)}
   .trust{margin-top:22px;display:flex;gap:18px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--mut)}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+  .path{display:block;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel);transition:.15s}
+  .path:hover{border-color:var(--blue)} .path.r:hover{border-color:var(--red)}
+  .path b{display:block;font-size:14px}
+  .path span{display:block;font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.4}
+  @media(max-width:520px){.paths{grid-template-columns:1fr}}
   .trust b{color:var(--ink-2);font-weight:500}
   /* terminal card */
   .term{background:#0b121b;border:1px solid var(--line);border-radius:14px;overflow:hidden;
@@ -412,6 +418,8 @@
     </div>
     <div class="smgroup">
       <p class="smh">Learn</p>
+      <a href="/players.html">For players</a>
+      <a href="/institutions.html">For institutions</a>
       <a href="/compare.html">Why Hotwash</a>
       <a href="/#faq">FAQ</a>
       <a href="mailto:hello@hotwa.sh">Contact</a>
@@ -433,6 +441,10 @@
       <div class="trust">
         <span><b>Uncopyable</b> per-team flags</span><span><b>Verify</b> before release</span><span><b>Server-side</b> grading</span><span><b>Offline</b> &amp; air-gapped</span>
       </div>
+      <nav class="paths" aria-label="Choose your path">
+        <a class="path r" href="/players.html"><b>I play &rarr;</b><span>Fight for a record. Seeded, verified, uncopyable matches with your name on the scorecard.</span></a>
+        <a class="path" href="/institutions.html"><b>I run a program &rarr;</b><span>Cohorts on verified instances, grades you can defend, a hotwash the same day.</span></a>
+      </nav>
     </div>
     <div class="term reveal" id="term" aria-hidden="true">
       <div class="tt"><i></i><i></i><i></i><span class="t">hotwa.sh &mdash; engagement</span></div>
@@ -890,6 +902,8 @@
       <nav class="fcol" aria-label="About">
         <h2>About</h2>
         <ul>
+          <li><a href="/players.html">For players</a></li>
+          <li><a href="/institutions.html">For institutions</a></li>
           <li><a href="/compare.html">Why Hotwash</a></li>
           <li><a href="/#faq">FAQ</a></li>
           <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>

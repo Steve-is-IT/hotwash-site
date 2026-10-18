@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var t=localStorage.getItem('hotwash-theme');document.documentElement.dataset.theme=(t==='light'||t==='dark')?t:'dark';}catch(e){document.documentElement.dataset.theme='dark';}</script>
+<title>For players — hotwa.sh</title>
+<meta name="description" content="Hotwash for players: seeded, verified, uncopyable matches; real tools scored on outcomes; a named scorecard, replays and a hotwash after every fight.">
+<link rel="canonical" href="https://hotwa.sh/players.html">
+<meta name="theme-color" content="#0a1a2f">
+<meta property="og:title" content="For players — hotwa.sh">
+<meta property="og:description" content="Play a range that can't be gamed. Your name on the scorecard, a hotwash after every fight.">
+<meta property="og:url" content="https://hotwa.sh/players.html">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%277%27 fill=%27%2316212e%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial Black,Arial,sans-serif%27 font-weight=%27900%27 font-size=%2714%27 letter-spacing=%27-0.5%27 text-anchor=%27middle%27 fill=%27%23eef4fb%27%3E.sh%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .phero{padding:64px 0 10px}
+  h1.big{font-size:clamp(34px,6vw,58px);font-weight:900;line-height:1.02;margin:16px 0 0}
+  .diff{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+  @media(max-width:860px){.diff{grid-template-columns:1fr}}
+  .dcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;position:relative;overflow:hidden}
+  .dcard .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin:0 0 10px}
+  .dcard h3{font-size:19px;margin:0 0 8px}
+  .dcard p{color:var(--ink-2);font-size:14px;margin:0;line-height:1.55}
+  .dcard.r .k{color:var(--red)} .dcard.g .k{color:var(--gold)} .dcard.o .k{color:var(--ok)}
+  .proof{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 28px;margin-top:22px}
+  @media(max-width:720px){.proof{grid-template-columns:1fr}}
+  .proof div{border-left:2px solid var(--line-2);padding:4px 0 4px 16px}
+  .proof b{display:block;font-size:15px;margin-bottom:4px}
+  .proof span{color:var(--ink-2);font-size:14px;line-height:1.55}
+  .sec-lede.wide{max-width:70ch;font-size:16px;line-height:1.6;color:var(--ink-2);margin:12px 0 0}
+  .cost{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  @media(max-width:860px){.cost{grid-template-columns:1fr}}
+  .cost div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .cost .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin:0 0 6px}
+  .cost b{font-family:var(--disp);font-size:22px;font-weight:900;display:block}
+  .cost p{color:var(--mut);font-size:13px;margin:6px 0 0;line-height:1.5}
+  .fine{color:var(--faint);font-size:12.5px;margin-top:14px;max-width:70ch;line-height:1.55}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="bar">
+  <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+  <span class="badge">v0.1 · free core</span>
+  <span class="spacer"></span>
+  <button class="themetoggle" id="themetoggle" type="button" aria-pressed="false" aria-label="Switch to light theme">
+    <svg class="moon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <svg class="sun" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <a class="cta" href="/watch.html">Watch a match</a>
+  <button class="menubtn" id="menubtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="supermenu" aria-label="Open menu">Menu<svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <nav class="supermenu" id="supermenu" aria-label="Primary" hidden>
+    <div class="smgroup">
+      <p class="smh">Product</p>
+      <a href="/#arena">Live arena</a>
+      <a href="/#modes">Modes</a>
+      <a href="/#scenarios">Scenarios</a>
+      <a href="/#scale">Cohorts</a>
+      <a href="/#tiers">Deploy</a>
+      <a href="/watch.html">Watch a match</a>
+    </div>
+    <div class="smgroup">
+      <p class="smh">Get it</p>
+      <a href="/pricing.html">Pricing</a>
+      <a href="/get-started.html">Get started</a>
+    </div>
+    <div class="smgroup">
+      <p class="smh">Learn</p>
+      <a href="/players.html" aria-current="page">For players</a>
+      <a href="/institutions.html">For institutions</a>
+      <a href="/compare.html">Why Hotwash</a>
+      <a href="/#faq">FAQ</a>
+      <a href="mailto:hello@hotwa.sh">Contact</a>
+    </div>
+  </nav>
+</div></header>
+
+<main id="main">
+  <section class="phero" style="border-top:0" aria-labelledby="ph-h"><div class="wrap">
+    <p class="eyebrow"><span class="bk">[</span> for players <span class="bk">]</span></p>
+    <h1 class="big" id="ph-h">Play a range that <span class="r">can&rsquo;t</span> be <span class="b">gamed</span>.</h1>
+    <p class="lede">Every match you play is yours alone &mdash; seeded, verified, uncopyable. Real tools against real targets, scored on what you actually pull off, with your name on the scorecard. Then a hotwash that tells you exactly what to fix.</p>
+    <div class="diff">
+      <div class="dcard r"><p class="k">// red</p><h3>Hands on keyboard</h3><p>Recon to objective across a seeded network. No two runs are the same, so write-ups don&rsquo;t help and nobody can hand you the flag.</p></div>
+      <div class="dcard"><p class="k">// blue</p><h3>Catch it for real</h3><p>Write a Sigma, YARA or Suricata-style rule and get graded on planted malicious plus benign data. Zero false positives, or it doesn&rsquo;t count.</p></div>
+      <div class="dcard g"><p class="k">// red vs blue</p><h3>Fight a live opponent</h3><p>Both cells on one board. You&rsquo;re scored on outcomes the mediation plane can see &mdash; footholds, captures, detections, evictions &mdash; not on which buttons you clicked.</p></div>
+    </div>
+  </div></section>
+
+  <section aria-labelledby="rec-h"><div class="wrap">
+    <p class="sec-k reveal">// your record</p>
+    <h2 class="sec reveal" id="rec-h">Your record follows you.</h2>
+    <p class="sec-lede wide reveal">Hotwash names operators. Every foothold, capture, detection and containment you make is credited to you &mdash; on the live board, in the replay and in the after-action report.</p>
+    <div class="proof reveal">
+      <div><b>Operators panel</b><span>The observer board ranks named red and blue operators by contribution while the match is live.</span></div>
+      <div><b>Per-operator scorecard</b><span>The hotwash breaks the team&rsquo;s score down to you: access, stealth, detection, response.</span></div>
+      <div><b>Replay scrubber</b><span>Drag through any finished match frame by frame and study the moment it turned.</span></div>
+      <div><b>Key moments</b><span>First blood, the jewel falling, the cut-off, the lead change &mdash; the story of the match, with your name on the beats you made.</span></div>
+    </div>
+  </div></section>
+
+  <section aria-labelledby="fair-h"><div class="wrap">
+    <p class="sec-k reveal">// fair by construction</p>
+    <h2 class="sec reveal" id="fair-h">Nobody gets to cheat. Including the platform.</h2>
+    <div class="proof reveal">
+      <div><b>Uncopyable flags</b><span>Your flags come from your seed. A flag copied from another team is simply wrong &mdash; and the log says who leaked it.</span></div>
+      <div><b>Verified before you see it</b><span>An independent solver recovers every flag from your instance before it&rsquo;s served. No broken challenges, no 2 a.m. &ldquo;is this one solvable?&rdquo;</span></div>
+      <div><b>Graded server-side</b><span>The answer key never reaches a browser. What you submit is checked against what was generated for you.</span></div>
+      <div><b>Outcomes, not keystrokes</b><span>In a live match the plane scores a seeded proof you can&rsquo;t read without real compromise, real detections, real eviction.</span></div>
+    </div>
+  </div></section>
+
+  <section aria-labelledby="learn-h"><div class="wrap">
+    <p class="sec-k reveal">// learn from every fight</p>
+    <h2 class="sec reveal" id="learn-h">The debrief is the point.</h2>
+    <p class="sec-lede wide reveal">Every match ends in a hotwash written from the journal: the five questions, what decided it, and a prioritized fix plan. Download it as Markdown, print it, watch the replay. In the consoles, press <code>?</code> &mdash; the shortcuts keep you fast when it counts.</p>
+    <div class="diff reveal">
+      <div class="dcard o"><p class="k">// bring your own kit</p><h3>Fight with your real stack</h3><p>On the own-kit tier you work from your own offensive or defensive tooling against container- or VM-backed infrastructure, with telemetry flowing into your SIEM.</p></div>
+      <div class="dcard"><p class="k">// three scenarios on the site</p><h3>Watch before you play</h3><p>The demo board runs three different matches &mdash; a razor-thin blue win, a red blitz, a clean hold. Pick one and watch how a match reads.</p></div>
+      <div class="dcard g"><p class="k">// dozens of ranges</p><h3>Industry-accurate terrain</h3><p>Active Directory, Kubernetes, payments, OT, cloud, ransomware, insider &mdash; built with the right components, ports and kill-chain order.</p></div>
+    </div>
+  </div></section>
+
+  <div class="wrap"><div class="ctaband reveal">
+    <p class="sec-k" style="color:var(--mut)">// ready to fight</p>
+    <h2>Watch a match. Then get a seat.</h2>
+    <p class="sub">See the board first. Then ask your program lead for a seat &mdash; or run the free Community edition offline today.</p>
+    <div class="btnrow">
+      <a class="btn primary" href="/watch.html">Watch a match</a>
+      <a class="btn ghost" href="/get-started.html">Get started</a>
+    </div>
+  </div></div>
+</main>
+
+<footer class="sitefoot">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a class="wm" href="/">hotwa<span class="dot">.sh</span></a>
+        <p class="foot-tag">The range that fights back. Red-team CTF, blue-team detection, and live red-vs-blue on one seeded, offline-first engine.</p>
+        <p class="foot-coll">Part of <a href="https://competencecollective.org">The Competence Collective</a>.</p>
+      </div>
+      <nav class="fcol" aria-label="Product">
+        <h2>Product</h2>
+        <ul>
+          <li><a href="/#arena">Live arena</a></li>
+          <li><a href="/#scenarios">Scenarios</a></li>
+          <li><a href="/#scale">Cohorts</a></li>
+          <li><a href="/#tiers">Deploy</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="Get it">
+        <h2>Get it</h2>
+        <ul>
+          <li><a href="/pricing.html">Pricing</a></li>
+          <li><a href="/get-started.html">Get started</a></li>
+          <li><a href="/watch.html">Watch a match</a></li>
+        </ul>
+      </nav>
+      <nav class="fcol" aria-label="About">
+        <h2>About</h2>
+        <ul>
+          <li><a href="/players.html">For players</a></li>
+          <li><a href="/institutions.html">For institutions</a></li>
+          <li><a href="/compare.html">Why Hotwash</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+          <li><a href="mailto:hello@hotwa.sh">Contact / request access</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bar">
+      <span>&copy; 2026 Hotwash &middot; hotwa.sh</span>
+      <span class="wm">hotwa<span class="dot">.sh</span></span>
+    </div>
+  </div>
+</footer>
+<script src="/assets/app.js"></script>
+</body>
+</html>
